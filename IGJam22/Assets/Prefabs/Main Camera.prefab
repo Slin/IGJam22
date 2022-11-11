@@ -59,7 +59,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 1
   rotationSpeed: 10
-  zoomSpeed: 1
+  zoomSpeed: 10
   minDistance: 50
   maxDistance: 1000
   minAngle: 20
