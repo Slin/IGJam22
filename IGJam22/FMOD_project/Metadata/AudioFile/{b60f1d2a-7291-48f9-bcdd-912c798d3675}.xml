@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{b60f1d2a-7291-48f9-bcdd-912c798d3675}">
+		<property name="assetPath">
+			<value>Regular_waves.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>59.016394557823126</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{bd7422ac-01ab-4363-905b-db9f5ae5b818}</destination>
+		</relationship>
+	</object>
+</objects>
