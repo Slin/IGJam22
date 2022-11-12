@@ -68,8 +68,8 @@ public class TikiSettlers : MonoBehaviour
 
                 value /= 25.0f;
 
-                weightVector.x += y * Mathf.Min(value, 100.0f);
-                weightVector.z += x * Mathf.Min(value, 100.0f);
+                weightVector.x += y * Mathf.Min(value, 50.0f);
+                weightVector.z += x * Mathf.Min(value, 50.0f);
 
                 int index = (y + 10) * 20 + (x + 10);
                 PopulationState newState = PopulationState.None;
