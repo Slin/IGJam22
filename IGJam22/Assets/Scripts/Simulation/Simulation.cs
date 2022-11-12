@@ -29,7 +29,7 @@ namespace Simulation
 
         public List<Influencer> influencers;
 
-        private List<Influence> requestedBuffers;
+        private List<Influence> _requestedBuffers;
         private Dictionary<Influence, (float[], float)> _outputBuffers;
         private Texture2D _copyBuffer;
         private NativeArray<float> _copyBufferArray;
@@ -48,9 +48,9 @@ namespace Simulation
 
         private void Awake()
         {
-            if (width % 8 != 0)
+            if (width % 2 != 0)
             {
-                Debug.LogError("Simulationsize needs to be a multiple of 8!");
+                Debug.LogError("Simulationsize needs to be a multiple of 2!");
             }
             _outputBuffers = new Dictionary<Influence, (float[], float)>();
             _sourceABufferID = Shader.PropertyToID("sourceA");
@@ -58,6 +58,7 @@ namespace Simulation
             _targetBufferID = Shader.PropertyToID("target");
             _maskBufferID = Shader.PropertyToID("mask");
             _timeStepPropID = Shader.PropertyToID("timeStep");
+            _requestedBuffers = new List<Influence>();
             _propIDs = new List<int>()
             {
                 Shader.PropertyToID("a"),
@@ -116,7 +117,7 @@ namespace Simulation
                 }
             }
             
-            foreach (Influence influence in requestedBuffers)
+            foreach (Influence influence in _requestedBuffers)
             {
                 QueryTexture(influence);
             }
@@ -155,9 +156,9 @@ namespace Simulation
         public bool GetValue(Influence influence, int x, int y, out float value)
         {
             value = 0.0f;
-            if (!requestedBuffers.Contains(influence))
+            if (!_requestedBuffers.Contains(influence))
             {
-                requestedBuffers.Add(influence);
+                _requestedBuffers.Add(influence);
                 return false;
             }
 

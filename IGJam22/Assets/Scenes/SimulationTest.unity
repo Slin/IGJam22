@@ -463,7 +463,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1245000063}
-  - component: {fileID: 1245000062}
   - component: {fileID: 1245000061}
   m_Layer: 0
   m_Name: World
@@ -492,18 +491,6 @@ MonoBehaviour:
   influencers:
   - {fileID: 11400000, guid: 4ba601d7402e0417ea4901be873c99f9, type: 2}
   - {fileID: 11400000, guid: 0ddb0858087a44eac9921d767fb28e36, type: 2}
---- !u!114 &1245000062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1245000060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c97af713b426a4bf08690ecbbad23c8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1245000063
 Transform:
   m_ObjectHideFlags: 0
