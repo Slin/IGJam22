@@ -8,13 +8,14 @@ public class HolyPineapple : MonoBehaviour
 
     public GameObject totemPrefab;
     public GameObject totemBubblePrefab;
+    public GameObject treePrefab;
     public GameObject treeBubblePrefab;
 
     public GameObject islandInstance;
     public PlayerCamera playerCamera;
 
     private GameObject pineappleInstance;
-    private float plantTimer = 0.0f;
+    private float plantTimer = -1.0f;
     private bool isPlanted = false;
 
     private GameObject totemBubbleInstance;
@@ -72,6 +73,7 @@ public class HolyPineapple : MonoBehaviour
                 if(plantTimer <= 0.0f)
                 {
                     isPlanted = true;
+                    plantTimer = -1.0f;
 
                     totemBubbleInstance = Instantiate(totemBubblePrefab);
                     totemBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f - pineappleInstance.transform.right * 45.0f;
@@ -96,6 +98,7 @@ public class HolyPineapple : MonoBehaviour
             }
             else
             {
+                objectToCreate = treePrefab;
                 totemBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", new Color(1 / 255.0f, 127 / 255.0f, 142 / 255.0f, 1.0f));
                 treeBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", Color.white);
             }

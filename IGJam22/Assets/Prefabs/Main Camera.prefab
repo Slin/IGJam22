@@ -154,6 +154,8 @@ MonoBehaviour:
     type: 3}
   totemBubblePrefab: {fileID: 8984649386315546131, guid: 8a85c9a869ee34369a73915e931a8dd0,
     type: 3}
+  treePrefab: {fileID: 7719983358353455369, guid: d960f8b94a6b94b6dab280e44eac8f97,
+    type: 3}
   treeBubblePrefab: {fileID: 668162011117422227, guid: 85589f28abaab485cb936c1790ea9d92,
     type: 3}
   islandInstance: {fileID: 0}
