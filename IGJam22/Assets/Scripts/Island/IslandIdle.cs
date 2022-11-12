@@ -8,95 +8,39 @@ public class IslandIdle : MonoBehaviour
     public float floatingAngle = 10;
     public float speed = 10;
 
-    private IslandIdleDirection direction;
-    private Vector3 startRotation;
+    private Quaternion startRotation;
+    private Quaternion endRotation;
+    private float time;
     private bool backRotation = false;
+    
     // Start is called before the first frame update
     void Start()
     {
-        startRotation = transform.up;
+        startRotation = Quaternion.Euler(Vector3.up);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Vector3.Angle(startRotation, gameObject.transform.up));
         if (!backRotation)
         {
-            switch (direction)
-            {
-                case IslandIdleDirection.North:
-                    gameObject.transform.Rotate(Vector3.right * Time.deltaTime * speed/10, Space.World);
-                    break;
-                case IslandIdleDirection.South:
-                    gameObject.transform.Rotate(-Vector3.right * Time.deltaTime * speed / 10, Space.World);
-                    break;
-                case IslandIdleDirection.West:
-                    gameObject.transform.Rotate(Vector3.forward * Time.deltaTime * speed / 10, Space.World);
-                    break;
-                case IslandIdleDirection.East:
-                    gameObject.transform.Rotate(-Vector3.forward * Time.deltaTime * speed / 10, Space.World);
-                    break;
-                default:
-                    break;
-            }
-            if (Vector3.Angle(startRotation, gameObject.transform.up) > floatingAngle)
-            {
-                backRotation = true;
-            }
+            time += Time.deltaTime*speed;
         }
         else
         {
-            switch (direction)
-            {
-                case IslandIdleDirection.North:
-                    gameObject.transform.Rotate(-Vector3.right * Time.deltaTime * speed / 10, Space.World);
-                    break;
-                case IslandIdleDirection.South:
-                    gameObject.transform.Rotate(Vector3.right * Time.deltaTime * speed / 10, Space.World);
-                    break;
-                case IslandIdleDirection.West:
-                    gameObject.transform.Rotate(-Vector3.forward * Time.deltaTime * speed / 10, Space.World);
-                    break;
-                case IslandIdleDirection.East:
-                    gameObject.transform.Rotate(Vector3.forward * Time.deltaTime * speed / 10, Space.World);
-                    break;
-                default:
-                    break;
-            }
-            if (backRotation && Vector3.Angle(startRotation, gameObject.transform.up) == 0)
-            {
-                backRotation = false;
-
-                int randomInt = Random.Range(0, 3);
-
-                switch (randomInt)
-                {
-                    case 0:
-                        direction = IslandIdleDirection.North;
-                        break;
-                    case 1:
-                        direction = IslandIdleDirection.South;
-                        break;
-                    case 2:
-                        direction = IslandIdleDirection.West;
-                        break;
-                    case 3:
-                        direction = IslandIdleDirection.East;
-                        break;
-                    default:
-                        break;
-                }
-            }
+            time -= Time.deltaTime*speed;
         }
-    }
-
-    private enum IslandIdleDirection
-    {
-        North,
-        South,
-        West,
-        East
+        if (time != 0)
+            gameObject.transform.rotation = Quaternion.Slerp(startRotation, endRotation, time);
+        if (time >= 1)
+        {
+            backRotation = true;
+        }
+        if (backRotation && time <= 0)
+        {
+            backRotation = false;
+            endRotation = Quaternion.Euler(Vector3.up) * Quaternion.AngleAxis(floatingAngle, new Vector3(Random.value*2-1,0,Random.value*2-1).normalized);
+        }
     }
 }
 

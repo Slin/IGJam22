@@ -93,7 +93,7 @@ namespace Simulation
             _tmpTex.enableRandomWrite = true;
             debugTexture = new RenderTexture(width, width, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
             debugTexture.enableRandomWrite = true;
-            debugMaterial.mainTexture = debugTexture;
+            if(debugMaterial) debugMaterial.mainTexture = debugTexture;
 
             _rawDebugTextureData = new float[width * width];
             _debugTextureCPU = new Texture2D(width, width, TextureFormat.RFloat, false);
@@ -207,7 +207,7 @@ namespace Simulation
 
         private void InitMap()
         {
-            List<Vector4> vectors = new List<Vector4>() { new Vector4(40, 40, 5.0f, 0) };
+            List<Vector4> vectors = new List<Vector4>() { new Vector4(50, 80, 1000.0f, 0) };
             int setVectorKernel = baseShader.FindKernel("setVectorValues");
             baseShader.SetInt(Shader.PropertyToID("ai"), 1);
             baseShader.SetVectorArray(Shader.PropertyToID("vectors"), vectors.ToArray());
