@@ -78,12 +78,12 @@ public class HolyPineapple : MonoBehaviour
                     float distanceToCamera = Vector3.Distance(newPosition, playerCamera.transform.position) * 0.2f;
 
                     totemBubbleInstance = Instantiate(totemBubblePrefab);
-                    totemBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f - pineappleInstance.transform.right * 0.5f * distanceToCamera;
+                    totemBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * distanceToCamera * 2.0f - playerCamera.transform.right * 0.5f * distanceToCamera;
                     BuildSelectionBubble totemBubble = totemBubbleInstance.GetComponent<BuildSelectionBubble>();
                     totemBubble.playerCamera = playerCamera.gameObject;
 
                     treeBubbleInstance = Instantiate(treeBubblePrefab);
-                    treeBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f + pineappleInstance.transform.right * 0.5f * distanceToCamera;
+                    treeBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * distanceToCamera * 2.0f + playerCamera.transform.right * 0.5f * distanceToCamera;
                     BuildSelectionBubble treeBubble = treeBubbleInstance.GetComponent<BuildSelectionBubble>();
                     treeBubble.playerCamera = playerCamera.gameObject;
                 }

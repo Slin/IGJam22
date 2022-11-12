@@ -20,7 +20,10 @@ public class TikiSettlers : MonoBehaviour
         public GameObject houseInstance;
     }
 
+    public GameObject settlerPrefab;
+
     public GameObject tentPrefab;
+    public GameObject housePrefab;
     public GameObject skyscraperPrefab;
 
     private Cell[] currentCells;
@@ -65,38 +68,55 @@ public class TikiSettlers : MonoBehaviour
                 PopulationState newState = PopulationState.None;
                 PopulationState oldState = currentCells[index].populationState;
 
-                if(value > 2.0f)
+                if(value > 20.0f)
                 {
                     newState = PopulationState.Settler;
                 }
-                if(value > 8.0f)
+                if(value > 50.0f)
                 {
                     newState = PopulationState.Settler2;
                 }
-                if(value > 15.0f)
+                if(value > 100.0f)
                 {
                     newState = PopulationState.Tent;
                 }
-                if(value > 50.0f)
+                if(value > 1000.0f)
                 {
                     newState = PopulationState.House;
                 }
-                if(value > 150.0f)
+                if(value > 10000.0f)
                 {
                     newState = PopulationState.Skyscraper;
                 }
 
                 if(newState > oldState)
                 {
-                    if(currentCells[index].houseInstance && newState == PopulationState.Skyscraper)
+                    if(currentCells[index].houseInstance && (newState == PopulationState.Skyscraper || newState == PopulationState.House))
                     {
                         Destroy(currentCells[index].houseInstance);
                         currentCells[index].houseInstance = null;
                     }
 
-                    if(newState == PopulationState.Tent)
+                    if(newState == PopulationState.Settler || newState == PopulationState.Settler2)
+                    {
+                        GameObject settlerInstance = Instantiate(settlerPrefab);
+                        settlerInstance.transform.parent = transform;
+                        settlerInstance.transform.localPosition = new Vector3(x*15.0f + Random.Range(0.0f, 10.0f), 200, y*15.0f + Random.Range(0.0f, 10.0f));
+                        settlerInstance.transform.localPosition += new Vector3(20.0f, 0.0f, 40.0f); //Additional offset to have everything on the island
+                        settlerInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
+                        RaycastHit hit;
+                        if(Physics.Raycast(settlerInstance.transform.position, -settlerInstance.transform.up, out hit))
+                        {
+                            settlerInstance.transform.localPosition -= settlerInstance.transform.up * hit.distance;
+                        }
+                    }
+                    else if(newState == PopulationState.Tent)
                     {
                         currentCells[index].houseInstance = Instantiate(tentPrefab);
+                    }
+                    else if(newState == PopulationState.House)
+                    {
+                        currentCells[index].houseInstance = Instantiate(housePrefab);
                     }
                     else if(newState == PopulationState.Skyscraper)
                     {
@@ -108,6 +128,7 @@ public class TikiSettlers : MonoBehaviour
                         GameObject houseInstance = currentCells[index].houseInstance;
                         houseInstance.transform.parent = transform;
                         houseInstance.transform.localPosition = new Vector3(x*15.0f + Random.Range(0.0f, 10.0f), 200, y*15.0f + Random.Range(0.0f, 10.0f));
+                        houseInstance.transform.localPosition += new Vector3(20.0f, 0.0f, 40.0f); //Additional offset to have everything on the island
                         houseInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
                         RaycastHit hit;
                         if(Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit))
