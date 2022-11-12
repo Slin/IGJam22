@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{63b6b828-1561-4dff-a9ac-213b93111519}">
+		<property name="assetPath">
+			<value>prayer.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>10</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{bd7422ac-01ab-4363-905b-db9f5ae5b818}</destination>
+		</relationship>
+	</object>
+</objects>
