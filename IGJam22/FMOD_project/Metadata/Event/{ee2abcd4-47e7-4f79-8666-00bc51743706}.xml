@@ -5,7 +5,7 @@
 			<value>Tree_fall</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{a49496ff-c858-4a08-bdc7-308c46c10449}</destination>
@@ -145,7 +145,6 @@
 	<object class="MixerBusEffectChain" id="{1a7c3155-6387-4897-8632-5e83a4fe248c}">
 		<relationship name="effects">
 			<destination>{753b1cd0-f370-4306-a65e-bc7bf2c4e884}</destination>
-			<destination>{9e4be6fd-efa6-4f19-bf18-47e7854a1ae4}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{c81ecb22-cc38-44e6-be9b-a1f0076c65fe}" />
@@ -163,14 +162,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{cff5b6e3-ea5a-457b-b6f9-52f5ceeb1e51}" />
 	<object class="MixerBusFader" id="{753b1cd0-f370-4306-a65e-bc7bf2c4e884}" />
-	<object class="SpatialiserEffect" id="{9e4be6fd-efa6-4f19-bf18-47e7854a1ae4}">
-		<property name="extentMode">
-			<value>1</value>
-		</property>
-		<property name="soundSize">
-			<value>10000</value>
-		</property>
-	</object>
 	<object class="MixerBusFader" id="{9a21894b-bf8d-4a62-8ed7-895d593af4f2}" />
 	<object class="MixerBusFader" id="{1e069d2f-6b7a-413e-bd2c-373345a07dee}" />
 </objects>
