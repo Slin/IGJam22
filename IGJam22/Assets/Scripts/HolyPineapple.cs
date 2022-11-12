@@ -49,7 +49,7 @@ public class HolyPineapple : MonoBehaviour
                     Vector3 hitPosition = transform.position + worldMouseDirection * hit.distance;
 
                     pineappleInstance.SetActive(true);
-                    pineappleInstance.transform.position = hitPosition + pineappleInstance.transform.up * 10.0f;
+                    pineappleInstance.transform.position = hitPosition;
 
                     if(Input.GetKeyDown(KeyCode.Mouse0))
                     {
@@ -75,13 +75,15 @@ public class HolyPineapple : MonoBehaviour
                     isPlanted = true;
                     plantTimer = -1.0f;
 
+                    float distanceToCamera = Vector3.Distance(newPosition, playerCamera.transform.position) * 0.1f;
+
                     totemBubbleInstance = Instantiate(totemBubblePrefab);
-                    totemBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f - pineappleInstance.transform.right * 45.0f;
+                    totemBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f - pineappleInstance.transform.right * 0.5f * distanceToCamera;
                     BuildSelectionBubble totemBubble = totemBubbleInstance.GetComponent<BuildSelectionBubble>();
                     totemBubble.playerCamera = playerCamera.gameObject;
 
                     treeBubbleInstance = Instantiate(treeBubblePrefab);
-                    treeBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f + pineappleInstance.transform.right * 45.0f;
+                    treeBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f + pineappleInstance.transform.right * 0.5f * distanceToCamera;
                     BuildSelectionBubble treeBubble = treeBubbleInstance.GetComponent<BuildSelectionBubble>();
                     treeBubble.playerCamera = playerCamera.gameObject;
                 }
