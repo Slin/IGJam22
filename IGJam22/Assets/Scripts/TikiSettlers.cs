@@ -101,8 +101,8 @@ public class TikiSettlers : MonoBehaviour
                     {
                         GameObject settlerInstance = Instantiate(settlerPrefab);
                         settlerInstance.transform.parent = transform;
-                        settlerInstance.transform.localPosition = new Vector3(x*15.0f + Random.Range(0.0f, 10.0f), 200, y*15.0f + Random.Range(0.0f, 10.0f));
-                        settlerInstance.transform.localPosition += new Vector3(20.0f, 0.0f, 40.0f); //Additional offset to have everything on the island
+                        settlerInstance.transform.localPosition = new Vector3(x*18.0f + Random.Range(0.0f, 15.0f), 200, y*18.0f + Random.Range(0.0f, 15.0f));
+                        settlerInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
                         settlerInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
                         RaycastHit hit;
                         if(Physics.Raycast(settlerInstance.transform.position, -settlerInstance.transform.up, out hit))
@@ -127,8 +127,8 @@ public class TikiSettlers : MonoBehaviour
                     {
                         GameObject houseInstance = currentCells[index].houseInstance;
                         houseInstance.transform.parent = transform;
-                        houseInstance.transform.localPosition = new Vector3(x*15.0f + Random.Range(0.0f, 10.0f), 200, y*15.0f + Random.Range(0.0f, 10.0f));
-                        houseInstance.transform.localPosition += new Vector3(20.0f, 0.0f, 40.0f); //Additional offset to have everything on the island
+                        houseInstance.transform.localPosition = new Vector3(x*18.0f + Random.Range(0.0f, 15.0f), 200, y*18.0f + Random.Range(0.0f, 15.0f));
+                        houseInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
                         houseInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
                         RaycastHit hit;
                         if(Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit))

@@ -22,7 +22,7 @@ public class PlayerCamera : MonoBehaviour
 
     private float distance = 100.0f;
     private Vector3 centerPosition = new Vector3(0.0f, 100.0f, 0.0f);
-    private Vector3 rotation = new Vector3(60.0f, 45.0f, 0.0f);
+    private Vector3 rotation = new Vector3(60.0f, 0.0f, 0.0f);
     private float shakeTime = 0.0f;
 
     // Start is called before the first frame update
