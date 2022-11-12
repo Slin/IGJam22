@@ -1,0 +1,147 @@
+#pragma use_dxc 
+#pragma kernel copyTextureToF
+#pragma kernel populate
+#pragma kernel spread
+#pragma kernel setVectorValues
+#pragma kernel copy
+#pragma kernel sampleTexture
+
+static const float pi = 3.14159265;
+static const float e = 2.71828183;
+
+SamplerState linearClampSampler;
+Texture2D<float> inTexture;
+RWTexture2D<float> sourceA;
+RWTexture2D<float> sourceB;
+RWTexture2D<float> target;
+RWTexture2D<float> mask;
+RWTexture2D<float> outDebug;
+
+int width;
+float timeStep;
+float a,b,c;
+int ai, bi, ci;
+
+float4 vectors[256];
+
+// a scale
+[numthreads(8, 8, 1)]
+void copy(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = sourceA[id.xy] * a;
+}
+
+[numthreads(8,8,1)]
+void sampleTexture(uint3 id : SV_DispatchThreadID)
+{
+    float2 uv = float2((float)id.x / width, (float)id.y / width);
+    target[id.xy] = inTexture.SampleLevel(linearClampSampler, uv, 0);
+}
+
+[numthreads(8,8,1)]
+void copyTextureToF (uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = inTexture[id.xy];
+}
+
+[numthreads(8,8,1)]
+void debugOut(uint3 id : SV_DispatchThreadID)
+{
+    outDebug[id.xy]= sourceA[id.xy];
+}
+
+// a population growth factor
+[numthreads(8,8,1)]
+void populate(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = sourceA[id.xy] + timeStep * sourceA[id.xy] * a;
+}
+
+float sigmoid(float x, float slope, float activationPoint)
+{
+    return 1.0f / (1.0f + pow(e, -slope * (x - activationPoint)));
+}
+
+
+#define SPREAD(offset, cfact) pollutionInfluence = mask[id.xy + offset] * sigmoid(sourceA[id.xy + offset], c, b); \
+val += sourceA[id.xy + offset] * pollutionInfluence * cfact; \
+fact += cfact;
+// a diffusion factor
+// b population activation offset
+// c population activation slope
+[numthreads(8,8,1)]
+void spread(uint3 id : SV_DispatchThreadID)
+{
+    float fact = 0;
+    float val = 0;
+    uint2 offset;
+    float pollutionInfluence;
+    //-x
+    if(id.xy[0] > 0)
+    {
+        offset = uint2(-1, 0);
+        SPREAD(offset, 1.0f)
+        // //-y
+        if(id.xy[1] > 0)
+        {
+            offset = uint2(-1, -1);
+            SPREAD(offset, 0.5f)
+        }
+        //+y
+        if(id.xy[1] < width - 1)
+        {
+            offset = uint2(-1, 1);
+            SPREAD(offset, 0.5f)
+        }
+    }
+    //x
+    if(id.xy[0] < width - 1)
+    {
+        offset = uint2(1, 0);
+        SPREAD(offset, 1.0f)
+        //-y
+        if(id.xy[1] > 0)
+        {
+            offset = uint2(1, -1);
+            SPREAD(offset, 0.5f)
+        }
+        //+y
+        if(id.xy[1] < width - 1)
+        {
+            offset = uint2(1, 1);
+            SPREAD(offset, 0.5f)
+        }
+    }
+    //
+    // // -y
+    if(id.xy[1] < width - 1)
+    {
+        offset = uint2(0, -1);
+        SPREAD(offset, 1.0f)
+    }
+    if(id.xy[1] < width - 1)
+    {
+        offset = uint2(0, 1);
+        SPREAD(offset, 1.0f)
+    }
+    if(fact > 0.0001f)
+    {
+        val = clamp(val, 0.0f, 100000.0f);
+        float i = (val / fact); 
+        float interp = clamp(sourceA[id.xy] * (1.0f - i) + (val / fact) * i, 0.0f, 100000.0f);
+        target[id.xy] = clamp((sourceA[id.xy] * (1.0f - a * timeStep) + interp * a * timeStep), 0.0f, 100000.0f); 
+    } else
+    {
+        target[id.xy] = sourceA[id.xy];   
+    }
+}
+
+[numthreads(8,1,1)]
+void setVectorValues(uint3 id : SV_DispatchThreadID)
+{
+    if(id.x < ai)
+    {
+        uint2 uv = vectors[id.x].xy;
+        target[uv] = vectors[id.x].z;
+    }
+}
