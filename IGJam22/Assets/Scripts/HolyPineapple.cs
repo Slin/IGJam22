@@ -5,6 +5,10 @@ using UnityEngine;
 public class HolyPineapple : MonoBehaviour
 {
     public GameObject pinapplePrefab;
+    public GameObject totemPrefab;
+
+    public GameObject islandInstance;
+    public PlayerCamera playerCamera;
 
     private GameObject pineappleInstance;
 
@@ -28,8 +32,18 @@ public class HolyPineapple : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(transform.position, worldMouseDirection, out hit))
         {
+            Vector3 hitPosition = transform.position + worldMouseDirection * hit.distance;
+
             pineappleInstance.SetActive(true);
-            pineappleInstance.transform.position = transform.position + worldMouseDirection * hit.distance;
+            pineappleInstance.transform.position = hitPosition;
+
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                GameObject totem = Instantiate(totemPrefab);
+                TikiTotemSpawn totemSpawn = totem.GetComponent<TikiTotemSpawn>();
+                totemSpawn.playerCamera = playerCamera;
+                totem.transform.position = hitPosition + Vector3.up * 500.0f; //Start above the click position to then fall from the sky
+            }
         }
         else
         {

@@ -125,14 +125,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f1c3495a4098476a96529dcacb21e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 1
+  movementSpeed: 2
   rotationSpeed: 10
-  zoomSpeed: 10
+  zoomSpeed: 5
   minDistance: 50
-  maxDistance: 1000
+  maxDistance: 400
   minAngle: 20
   maxAngle: 80
   scrollBorderWidth: 20
+  minPosition: {x: -200, y: -200}
+  maxPosition: {x: 200, y: 200}
+  screenShakeStrength: 2
 --- !u!114 &6875017468936582488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +150,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinapplePrefab: {fileID: 2252212982013116998, guid: 810b8411b5e9e40b7904267fa4131cbc,
     type: 3}
+  totemPrefab: {fileID: 919132149155446097, guid: 82ea7c9e44d234413a80cf618a0d6f58,
+    type: 3}
+  islandInstance: {fileID: 0}
+  playerCamera: {fileID: 2623471998538314787}
 --- !u!114 &-4749040350916558057
 MonoBehaviour:
   m_ObjectHideFlags: 0

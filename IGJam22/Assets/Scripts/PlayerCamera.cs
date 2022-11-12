@@ -18,10 +18,12 @@ public class PlayerCamera : MonoBehaviour
     public float scrollBorderWidth = 20.0f;
     public Vector2 minPosition = new Vector2(-200.0f, -200.0f);
     public Vector2 maxPosition = new Vector2(200.0f, 200.0f);
+    public float screenShakeStrength = 2.0f;
 
     private float distance = 200.0f;
     private Vector3 centerPosition = new Vector3(0.0f, 100.0f, 0.0f);
     private Vector3 rotation = new Vector3(45.0f, 0.0f, 0.0f);
+    private float shakeTime = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -66,14 +68,23 @@ public class PlayerCamera : MonoBehaviour
         }
 
         float axis = Input.GetAxis("Mouse ScrollWheel");
-        Debug.Log(axis);
         distance -= axis * zoomSpeed;
         distance = Mathf.Clamp(distance, minDistance, maxDistance);
-        Debug.Log(distance);
 
         Quaternion rotationQuat = Quaternion.Euler(rotation);
         Vector3 distanceVec = new Vector3(0.0f, 0.0f, -distance);
         transform.position = centerPosition + rotationQuat * distanceVec;
         transform.LookAt(centerPosition);
+
+        if(shakeTime > 0.0f)
+        {
+            transform.rotation *= Quaternion.Euler(0.0f, 0.0f, Random.Range(-screenShakeStrength, screenShakeStrength));
+            shakeTime -= Time.deltaTime;
+        }
+    }
+
+    public void DoTotemShake()
+    {
+        shakeTime = 0.1f;
     }
 }
