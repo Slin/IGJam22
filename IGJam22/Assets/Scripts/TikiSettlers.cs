@@ -107,7 +107,7 @@ public class TikiSettlers : MonoBehaviour
                         RaycastHit hit;
                         if(Physics.Raycast(settlerInstance.transform.position, -settlerInstance.transform.up, out hit))
                         {
-                            settlerInstance.transform.localPosition -= settlerInstance.transform.up * hit.distance;
+                            settlerInstance.transform.position -= settlerInstance.transform.up * hit.distance;
                         }
                     }
                     else if(newState == PopulationState.Tent)
@@ -133,7 +133,7 @@ public class TikiSettlers : MonoBehaviour
                         RaycastHit hit;
                         if(Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit))
                         {
-                            houseInstance.transform.localPosition -= houseInstance.transform.up * hit.distance;
+                            houseInstance.transform.position -= houseInstance.transform.up * hit.distance;
                             currentCells[index].houseInstance = houseInstance;
                         }
                         else
