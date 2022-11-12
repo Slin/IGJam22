@@ -75,7 +75,7 @@ public class HolyPineapple : MonoBehaviour
                     isPlanted = true;
                     plantTimer = -1.0f;
 
-                    float distanceToCamera = Vector3.Distance(newPosition, playerCamera.transform.position) * 0.1f;
+                    float distanceToCamera = Vector3.Distance(newPosition, playerCamera.transform.position) * 0.2f;
 
                     totemBubbleInstance = Instantiate(totemBubblePrefab);
                     totemBubbleInstance.transform.position = pineappleInstance.transform.position + pineappleInstance.transform.up * 50.0f - pineappleInstance.transform.right * 0.5f * distanceToCamera;

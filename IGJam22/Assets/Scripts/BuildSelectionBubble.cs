@@ -16,7 +16,7 @@ public class BuildSelectionBubble : MonoBehaviour
     void Update()
     {
         transform.rotation = Quaternion.LookRotation(-playerCamera.transform.forward, playerCamera.transform.up);
-        float distanceToCamera = Vector3.Distance(transform.position, playerCamera.transform.position) * 0.1f;
+        float distanceToCamera = Vector3.Distance(transform.position, playerCamera.transform.position) * 0.2f;
         transform.localScale = new Vector3(distanceToCamera, distanceToCamera, distanceToCamera);
     }
 }
