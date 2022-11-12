@@ -16,6 +16,8 @@ public class PlayerCamera : MonoBehaviour
     public float minAngle = 20.0f;
     public float maxAngle = 80.0f;
     public float scrollBorderWidth = 20.0f;
+    public Vector2 minPosition = new Vector2(-200.0f, -200.0f);
+    public Vector2 maxPosition = new Vector2(200.0f, 200.0f);
 
     private float distance = 200.0f;
     private Vector3 centerPosition = new Vector3(0.0f, 100.0f, 0.0f);
@@ -53,6 +55,8 @@ public class PlayerCamera : MonoBehaviour
 
         movement.y = 0.0f;
         centerPosition += movement * movementSpeed * Time.deltaTime * distance;
+        centerPosition.x = Mathf.Clamp(centerPosition.x, minPosition.x, maxPosition.x);
+        centerPosition.z = Mathf.Clamp(centerPosition.z, minPosition.y, maxPosition.y);
 
         if(Input.GetKey(KeyCode.Mouse1))
         {
