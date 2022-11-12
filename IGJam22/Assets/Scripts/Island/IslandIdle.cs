@@ -17,12 +17,14 @@ public class IslandIdle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (backRotation && Vector3.Angle(startRotation, gameObject.transform.up) == 0)
+        var test = Mathf.Abs(Vector3.Angle(startRotation, gameObject.transform.up));
+        if (backRotation && test <= 2)
         {
             backRotation = false;
         }
-        if (Vector3.Angle(startRotation , gameObject.transform.up) > 5 && !backRotation)
+        else if (Vector3.Angle(startRotation , gameObject.transform.up) > 5 && !backRotation)
         {
+            backRotation = true;
             int randomInt = Random.Range(0, 3);
 
             switch (randomInt)
@@ -48,27 +50,47 @@ public class IslandIdle : MonoBehaviour
 
         if (backRotation == false)
         {
+            Vector3 tempRotation = Vector3.zero;
             switch (direction)
             {
                 case IslandIdleDirection.North:
-                    gameObject.transform.Rotate(Vector3.right * Time.deltaTime, Space.World);
+                    tempRotation = Vector3.right * Time.deltaTime;
                     break;
                 case IslandIdleDirection.South:
-                    gameObject.transform.Rotate(-Vector3.right * Time.deltaTime, Space.World);
+                    tempRotation = -Vector3.right * Time.deltaTime;
                     break;
                 case IslandIdleDirection.West:
-                    gameObject.transform.Rotate(Vector3.forward * Time.deltaTime, Space.World);
+                    tempRotation = Vector3.forward * Time.deltaTime;
                     break;
                 case IslandIdleDirection.East:
-                    gameObject.transform.Rotate(-Vector3.forward * Time.deltaTime, Space.World);
+                    tempRotation = -Vector3.forward * Time.deltaTime;
                     break;
                 default:
                     break;
             }
+            gameObject.transform.Rotate(tempRotation * 10, Space.World);
         }
         else
         {
-            gameObject.transform.Rotate(Vector3.up * Time.deltaTime, Space.World);
+            Vector3 tempRotation = Vector3.zero;
+            switch (direction)
+            {
+                case IslandIdleDirection.North:
+                    tempRotation = -Vector3.right * Time.deltaTime;
+                    break;
+                case IslandIdleDirection.South:
+                    tempRotation = Vector3.right * Time.deltaTime;
+                    break;
+                case IslandIdleDirection.West:
+                    tempRotation = -Vector3.forward * Time.deltaTime;
+                    break;
+                case IslandIdleDirection.East:
+                    tempRotation = Vector3.forward * Time.deltaTime;
+                    break;
+                default:
+                    break;
+            }
+            gameObject.transform.Rotate(tempRotation * 10, Space.World);
         }
  
 
