@@ -128,8 +128,8 @@ MonoBehaviour:
   movementSpeed: 2
   rotationSpeed: 10
   zoomSpeed: 5
-  minDistance: 50
-  maxDistance: 400
+  minDistance: 30
+  maxDistance: 300
   minAngle: 35
   maxAngle: 80
   scrollBorderWidth: 20
