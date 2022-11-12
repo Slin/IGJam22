@@ -93,7 +93,7 @@ namespace Simulation
             _tmpTex.enableRandomWrite = true;
             debugTexture = new RenderTexture(width, width, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
             debugTexture.enableRandomWrite = true;
-            debugMaterial.mainTexture = debugTexture;
+            if(debugMaterial) debugMaterial.mainTexture = debugTexture;
 
             _rawDebugTextureData = new float[width * width];
             _debugTextureCPU = new Texture2D(width, width, TextureFormat.RFloat, false);

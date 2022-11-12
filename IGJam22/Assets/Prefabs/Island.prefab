@@ -57,6 +57,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9088914788164151317}
   - component: {fileID: 6129219666678065611}
+  - component: {fileID: 122776065665354568}
+  - component: {fileID: 4410505831272430565}
   m_Layer: 0
   m_Name: IslandContainter
   m_TagString: Untagged
@@ -94,6 +96,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingAngle: 10
   speed: 10
+--- !u!114 &122776065665354568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8055652690384454350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a99efadff13427b821ce96212db01b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tentPrefab: {fileID: 1139450997438871318, guid: 7d609103a562549feae9bd74a6f4681d,
+    type: 3}
+--- !u!114 &4410505831272430565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8055652690384454350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d73c999b7fd4229ae7e29000f48355d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 100
+  worldMask: {fileID: 2800000, guid: 489422e1f90b34366ac1d93eaeff152c, type: 3}
+  baseShader: {fileID: 7200000, guid: cc3ddb25b3db4445d8bea82cf3ba5ca3, type: 3}
+  debugTexture: {fileID: 0}
+  debugMaterial: {fileID: 0}
+  influencers:
+  - {fileID: 11400000, guid: 4ba601d7402e0417ea4901be873c99f9, type: 2}
+  - {fileID: 11400000, guid: 0ddb0858087a44eac9921d767fb28e36, type: 2}
 --- !u!1001 &1737020958137604558
 PrefabInstance:
   m_ObjectHideFlags: 0
