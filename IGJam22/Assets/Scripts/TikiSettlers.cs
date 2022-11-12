@@ -131,12 +131,14 @@ public class TikiSettlers : MonoBehaviour
                         houseInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
                         houseInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
                         RaycastHit hit;
-                        if(Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit))
+                        bool didHit = Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit);
+                        if(didHit)
                         {
                             houseInstance.transform.position -= houseInstance.transform.up * hit.distance;
                             currentCells[index].houseInstance = houseInstance;
                         }
-                        else
+
+                        if(!didHit || houseInstance.transform.localPosition.y < -30.0f)
                         {
                             Destroy(houseInstance);
                             currentCells[index].houseInstance = null;
