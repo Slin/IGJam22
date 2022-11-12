@@ -68,8 +68,8 @@ public class TikiSettlers : MonoBehaviour
 
                 value /= 25.0f;
 
-                weightVector.x += x * value;
-                weightVector.z += y * value;
+                weightVector.x += y * Mathf.Min(value, 100.0f);
+                weightVector.z += x * Mathf.Min(value, 100.0f);
 
                 int index = (y + 10) * 20 + (x + 10);
                 PopulationState newState = PopulationState.None;
@@ -157,7 +157,7 @@ public class TikiSettlers : MonoBehaviour
             }
         }
 
-        islandBalance.IslandAngle.x = Mathf.Clamp(weightVector.z * 0.001f, -15.0f, 15.0f);
-        islandBalance.IslandAngle.z = Mathf.Clamp(weightVector.x * 0.001f, -15.0f, 15.0f);
+        islandBalance.IslandAngle.x = Mathf.Clamp(weightVector.x * 0.001f, -15.0f, 15.0f);
+        islandBalance.IslandAngle.z = Mathf.Clamp(weightVector.z * 0.001f, -15.0f, 15.0f);
     }
 }
