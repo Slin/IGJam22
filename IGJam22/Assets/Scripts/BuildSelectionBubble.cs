@@ -15,6 +15,6 @@ public class BuildSelectionBubble : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation.SetFromToRotation(transform.position, playerCamera.transform.position);
+        transform.rotation = Quaternion.LookRotation(-playerCamera.transform.right, playerCamera.transform.up);//Quaternion.FromToRotation(transform.position, playerCamera.transform.position);
     }
 }

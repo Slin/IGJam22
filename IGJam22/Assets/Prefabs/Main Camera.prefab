@@ -150,7 +150,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinapplePrefab: {fileID: 2252212982013116998, guid: 810b8411b5e9e40b7904267fa4131cbc,
     type: 3}
-  totemPrefab: {fileID: 919132149155446097, guid: 82ea7c9e44d234413a80cf618a0d6f58,
+  totemPrefab: {fileID: 3048497235714461271, guid: 74a3c6b733946409fadd931f72dbae07,
+    type: 3}
+  totemBubblePrefab: {fileID: 8984649386315546131, guid: 8a85c9a869ee34369a73915e931a8dd0,
+    type: 3}
+  treeBubblePrefab: {fileID: 668162011117422227, guid: 85589f28abaab485cb936c1790ea9d92,
     type: 3}
   islandInstance: {fileID: 0}
   playerCamera: {fileID: 2623471998538314787}

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TikiTotemSpawn : MonoBehaviour
 {
     public PlayerCamera playerCamera;
-    private float fallSpeed = 100.0f;
+    private float fallSpeed = 500.0f;
     private bool isFalling = true;
 
     // Start is called before the first frame update
