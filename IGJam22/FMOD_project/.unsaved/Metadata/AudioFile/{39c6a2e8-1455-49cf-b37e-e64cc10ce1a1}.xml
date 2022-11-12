@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="AudioFile" id="{006821f5-172a-446c-b2bc-c39990d79158}">
-		<property name="assetPath">
-			<value>prayer_opening.ogg</value>
-		</property>
+	<object class="AudioFile" id="{39c6a2e8-1455-49cf-b37e-e64cc10ce1a1}">
+		<property name="assetPath" />
 		<property name="frequencyInKHz">
 			<value>44.0999985</value>
 		</property>
@@ -11,7 +9,7 @@
 			<value>2</value>
 		</property>
 		<property name="length">
-			<value>4.9180272108843539</value>
+			<value>3.9344217687074829</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{bd7422ac-01ab-4363-905b-db9f5ae5b818}</destination>
