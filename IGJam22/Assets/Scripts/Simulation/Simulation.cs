@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Simulation
 {
@@ -15,10 +14,17 @@ namespace Simulation
         public int width;
         public Texture2D worldMask;
         public ComputeShader baseShader;
+        public float migrationStart;
+        
         // Weight, Pollution, population, nature?
         private Dictionary<Influence, RenderTexture> _values;
 
         private RenderTexture _tmpTex;
+        private RenderTexture _tmpTex2;
+        private RenderTexture _tmpTex3;
+        
+        public RenderTexture _miniBuffer;
+        private Texture2D _miniBufferTexture;
 
         public RenderTexture debugTexture;
         public Material debugMaterial;
@@ -33,6 +39,8 @@ namespace Simulation
         private Dictionary<Influence, (float[], float)> _outputBuffers;
         private Texture2D _copyBuffer;
         private NativeArray<float> _copyBufferArray;
+        private NativeArray<float> _miniCopyBufferArray;
+        private float[] _miniValBuffer = new float[GroupSize1D];
 
         private int _sourceABufferID;
         private int _sourceBBufferID;
@@ -41,10 +49,19 @@ namespace Simulation
 
         private int _timeStepPropID;
         private List<int> _propIDs;
+        private List<int> _propiIDs;
         private int _copyKernelID;
+        private int _setKernelID;
+        private int _reduceKernelID;
+        private int _combineReduceKernelID;
+        private int _subtractAndClampID;
+        private int _subtractID;
+        private int _multiplyID;
         
         private bool _loadInProgress;
         private float _t1;
+
+        private static readonly int GroupSize1D = 256;
 
         private void Awake()
         {
@@ -66,6 +83,12 @@ namespace Simulation
                 Shader.PropertyToID("c"),
                 Shader.PropertyToID("d")
             };
+            _propiIDs = new List<int>()
+            {
+                Shader.PropertyToID("ai"),
+                Shader.PropertyToID("bi"),
+                Shader.PropertyToID("ci")
+            };
             baseShader.SetInt(Shader.PropertyToID("width"), width);
             _copyBuffer = new Texture2D(width, width, TextureFormat.RFloat, false);
             _copyBufferArray = _copyBuffer.GetRawTextureData<float>();
@@ -80,6 +103,12 @@ namespace Simulation
             baseShader.Dispatch(copyKernel, dispatchSize.x, dispatchSize.y, 1);
 
             _copyKernelID = baseShader.FindKernel("copy");
+            _setKernelID = baseShader.FindKernel("set");
+            _reduceKernelID = baseShader.FindKernel("reduceGroups");
+            _combineReduceKernelID = baseShader.FindKernel("combineReduceResults");
+            _subtractAndClampID = baseShader.FindKernel("subtractAndClamp");
+            _subtractID = baseShader.FindKernel("subtract");
+            _multiplyID = baseShader.FindKernel("multiply");
 
             _values = new Dictionary<Influence, RenderTexture>();
             foreach(Influence influence in Enum.GetValues(typeof(Influence)))
@@ -91,6 +120,16 @@ namespace Simulation
             
             _tmpTex = new RenderTexture(width, width, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
             _tmpTex.enableRandomWrite = true;
+            _tmpTex2 = new RenderTexture(width, width, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
+            _tmpTex2.enableRandomWrite = true;
+            _tmpTex3 = new RenderTexture(width, width, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
+            _tmpTex3.enableRandomWrite = true;
+            
+            _miniBuffer = new RenderTexture(GroupSize1D, 1, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
+            _miniBuffer.enableRandomWrite = true;
+            _miniBufferTexture = new Texture2D(GroupSize1D, 1, TextureFormat.RFloat, false);
+            _miniCopyBufferArray = _miniBufferTexture.GetRawTextureData<float>();
+            
             debugTexture = new RenderTexture(width, width, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
             debugTexture.enableRandomWrite = true;
             debugMaterial.mainTexture = debugTexture;
@@ -99,8 +138,8 @@ namespace Simulation
             _debugTextureCPU = new Texture2D(width, width, TextureFormat.RFloat, false);
 
             InitMap();
-            // SimulationStep(1.0f);
-            ReadDebugTexture();
+            SimulationStep(1.0f);
+            //ReadDebugTexture();
         }
 
         private void Update()
@@ -198,6 +237,7 @@ namespace Simulation
             RenderTexture.active = null;
             NativeArray<float> debugData = _debugTextureCPU.GetRawTextureData<float>();
             debugData.CopyTo(_rawDebugTextureData);
+            // Debug.Log($"Debug Data: [{string.Join(',', debugData)}]");
         }
 
         private float GetPixelValue(int x, int y)
@@ -209,19 +249,44 @@ namespace Simulation
         {
             List<Vector4> vectors = new List<Vector4>() { new Vector4(40, 40, 5.0f, 0) };
             int setVectorKernel = baseShader.FindKernel("setVectorValues");
-            baseShader.SetInt(Shader.PropertyToID("ai"), 1);
+            baseShader.SetInt(_propiIDs[0], 1);
             baseShader.SetVectorArray(Shader.PropertyToID("vectors"), vectors.ToArray());
             baseShader.SetTexture(setVectorKernel, _targetBufferID, _values[Influence.Population]);
             baseShader.Dispatch(setVectorKernel, 1, 1, 1);
             
-            CopyTo(_values[Influence.Population], debugTexture, 1f);
+            //CopyTo(_values[Influence.Population], debugTexture, 1f);
+
+            int noiseWidth = (int)(width * 0.1f);
+            float[] noise = new float[noiseWidth * noiseWidth];
+            for (var i = 0; i < noise.Length; i++)
+            {
+                noise[i] = Random.Range(-10.0f, 10.0f);
+            }
+
+            Texture2D noiseTexture = new Texture2D(noiseWidth, noiseWidth, TextureFormat.RFloat, false);
+            NativeArray<float> noiseBuffer = noiseTexture.GetRawTextureData<float>();
+            noiseBuffer.CopyFrom(noise);
+            noiseTexture.SetPixelData(noiseBuffer, 0);
+            noiseTexture.Apply();
+            int copyKernel = baseShader.FindKernel("sampleTexture");
+            int textureID = Shader.PropertyToID("inTexture");
+            baseShader.SetTexture(copyKernel, textureID, noiseTexture);
+            baseShader.SetTexture(copyKernel, _targetBufferID, _values[Influence.Spirit]);
+            Vector2Int dispatchSize = GetDispatchSize(copyKernel);
+            baseShader.Dispatch(copyKernel, dispatchSize.x, dispatchSize.y, 1);
+            
+            //CopyTo(_values[Influence.Spirit], debugTexture);
+            
+            // Graphics.CopyTexture(_copyBuffer, _values[Influence.Spirit]);
+            // _copyBuffer.Apply();
+            // CopyTo(_copyBuffer, _values[Influence.Spirit]);
         }
 
         private Vector2Int GetDispatchSize(int kernelID)
         {
             uint dimx, dimy, dimz;
             baseShader.GetKernelThreadGroupSizes(kernelID, out dimx, out dimy, out dimz);
-            return new Vector2Int((int)(width / dimx), (int)(width / dimy));
+            return new Vector2Int(Mathf.CeilToInt(width / (float)dimx), Mathf.CeilToInt(width / (float)dimy));
         }
         
         private void SimulationStep(float timestep)
@@ -233,17 +298,36 @@ namespace Simulation
                    influencer.sourceBID != Influence.None ? _values[influencer.sourceBID] : null, 
                    _values[influencer.targetID], influencer.args);
             }
+
+            Migrate(migrationStart);
+            // Reduce(_values[Influence.Population]);
             CopyTo(_values[Influence.Population], debugTexture, 1f);
             ReadDebugTexture();
         }
         
-        private void CopyTo(RenderTexture source, RenderTexture target, float scale=1.0f)
+        private void CopyTo(Texture source, RenderTexture target, float scale=1.0f, int length=0)
         {
-            Vector2Int dispatchSize = GetDispatchSize(_copyKernelID);
+            Vector2Int dispatchSize = new Vector2Int(length, 1);
+            if (length == 0)
+            {
+                length = width * width;
+                dispatchSize = GetDispatchSize(_copyKernelID);
+            }
+            
+            baseShader.SetInt(_propiIDs[0], length);
             baseShader.SetFloat(_propIDs[0], scale);
             baseShader.SetTexture(_copyKernelID, _sourceABufferID, source);
             baseShader.SetTexture(_copyKernelID, _targetBufferID, target);
             baseShader.Dispatch(_copyKernelID, dispatchSize.x, dispatchSize.y, 1);
+        }
+        
+        private void Set(RenderTexture target, float value)
+        {
+            Vector2Int dispatchSize = GetDispatchSize(_copyKernelID);
+            
+            baseShader.SetFloat(_propIDs[0], value);
+            baseShader.SetTexture(_setKernelID, _targetBufferID, target);
+            baseShader.Dispatch(_setKernelID, dispatchSize.x, dispatchSize.y, 1);
         }
 
         private void Apply(float timestep, ComputeShader shader, int kernelID, RenderTexture sourceA, RenderTexture sourceB, RenderTexture target, List<float> values)
@@ -275,6 +359,110 @@ namespace Simulation
             {
                 CopyTo(_tmpTex, target);
             }
+        }
+
+        private void Migrate(float migrationThreshold)
+        {
+            Vector2Int dispatch = GetDispatchSize(_subtractAndClampID);
+            baseShader.SetFloat(_propIDs[0], migrationThreshold);
+            baseShader.SetTexture(_subtractAndClampID, _targetBufferID, _tmpTex);
+            baseShader.SetTexture(_subtractAndClampID, _sourceABufferID, _values[Influence.Population]);
+            baseShader.Dispatch(_subtractAndClampID, dispatch.x, dispatch.y, 1);
+            CopyTo(_tmpTex, _tmpTex3);
+            float volumeToMigrate = Reduce(_tmpTex);
+            if (volumeToMigrate < 10)
+            {
+                return;
+            }
+            // Debug.Log($"Volume to migrate: {volumeToMigrate}");
+
+            float x = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                CopyTo(_values[Influence.Spirit], _tmpTex);
+                float p1 = GetVolumeAt(x);
+                if (Mathf.Abs(p1 - volumeToMigrate) < 100)
+                {
+                    // Debug.Log($"Found offset: {x} ({Mathf.Abs(p1 - volumeToMigrate)})");
+                    break;
+                }
+                else
+                {
+                    // Debug.Log($"Offset at {x}: {p1}");
+                }
+                CopyTo(_values[Influence.Spirit], _tmpTex);
+                float p2 = GetVolumeAt(x + 1);
+                x = x + (p1 - volumeToMigrate) / (p1 - p2);
+                // Debug.Log($"(p1-p2): {(p1-p2)}, x: {x}, facr: {(p1 - volumeToMigrate)}");
+            }
+            // Debug.Log("Done Newton optimisation.");
+            
+            dispatch = GetDispatchSize(_subtractID);
+            baseShader.SetFloat(_propIDs[0], 1);
+            baseShader.SetTexture(_subtractID, _sourceABufferID, _tmpTex3);
+            baseShader.SetTexture(_subtractID, _targetBufferID, _values[Influence.Population]);
+            baseShader.Dispatch(_subtractID, dispatch.x, dispatch.y, 1);
+            
+            dispatch = GetDispatchSize(_subtractAndClampID);
+            baseShader.SetFloat(_propIDs[0], x);
+            baseShader.SetTexture(_subtractAndClampID, _targetBufferID, _tmpTex);
+            baseShader.SetTexture(_subtractAndClampID, _sourceABufferID, _values[Influence.Spirit]);
+            baseShader.Dispatch(_subtractAndClampID, dispatch.x, dispatch.y, 1);
+            
+            ApplyMask(_tmpTex);
+            dispatch = GetDispatchSize(_subtractID);
+            baseShader.SetFloat(_propIDs[0], -1);
+            baseShader.SetTexture(_subtractID, _sourceABufferID, _tmpTex);
+            baseShader.SetTexture(_subtractID, _targetBufferID, _values[Influence.Population]);
+            baseShader.Dispatch(_subtractID, dispatch.x, dispatch.y, 1);
+            // CopyTo(_values[Influence.Population], debugTexture);
+        }
+
+        private float GetVolumeAt(float offset)
+        {
+            Vector2Int dispatch = GetDispatchSize(_subtractAndClampID);
+            baseShader.SetFloat(_propIDs[0], offset);
+            baseShader.SetTexture(_subtractAndClampID, _sourceABufferID, _tmpTex);
+            baseShader.SetTexture(_subtractAndClampID, _targetBufferID, _tmpTex2);
+            baseShader.Dispatch(_subtractAndClampID, dispatch.x, dispatch.y, 1);
+            return Reduce(_tmpTex2);
+        }
+
+        private float Reduce(RenderTexture target)
+        {
+            ApplyMask(target);
+            // CopyTo(target, _tmpTex);
+            int size = width * width;
+            int reducedNumResults = Mathf.CeilToInt(size / (float)(GroupSize1D * 2.0f));
+            baseShader.SetInt(_propiIDs[0], size);
+            baseShader.SetTexture(_reduceKernelID, _targetBufferID, target);
+            baseShader.Dispatch(_reduceKernelID, Mathf.CeilToInt(size / (float)GroupSize1D), 1, 1);
+            
+            CopyTo(target, _tmpTex2);
+            baseShader.SetTexture(_combineReduceKernelID, _sourceABufferID, _tmpTex2);
+            baseShader.SetTexture(_combineReduceKernelID, _targetBufferID, target);
+            baseShader.Dispatch(_combineReduceKernelID, Mathf.CeilToInt(reducedNumResults / (float)GroupSize1D), 1, 1);
+            
+            baseShader.SetInt(_propiIDs[0], reducedNumResults);
+            baseShader.Dispatch(_reduceKernelID, 1, 1, 1);
+            CopyTo(target, _miniBuffer, 1.0f, GroupSize1D);
+            
+            RenderTexture.active = _miniBuffer;
+            _miniBufferTexture.ReadPixels(new Rect(0, 0, GroupSize1D, 1), 0, 0);
+            _miniBufferTexture.Apply();
+            RenderTexture.active = null;
+            _miniCopyBufferArray = _miniBufferTexture.GetRawTextureData<float>();
+            _miniCopyBufferArray.CopyTo(_miniValBuffer);
+            float res = _miniValBuffer[0];
+            return res; //val[0];
+        }
+
+        private void ApplyMask(RenderTexture target)
+        {
+            Vector2Int dispatch = GetDispatchSize(_multiplyID);
+            baseShader.SetTexture(_multiplyID, _maskBufferID, _mask);
+            baseShader.SetTexture(_multiplyID, _targetBufferID, target);
+            baseShader.Dispatch(_multiplyID, dispatch.x, dispatch.y, 1);
         }
     }
 }
