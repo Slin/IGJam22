@@ -15,6 +15,7 @@ namespace Simulation
         public Texture2D worldMask;
         public ComputeShader baseShader;
         public float migrationStart;
+        public float noiseSize;
         
         // Weight, Pollution, population, nature?
         private Dictionary<Influence, RenderTexture> _values;
@@ -132,7 +133,7 @@ namespace Simulation
             
             debugTexture = new RenderTexture(width, width, GraphicsFormat.R32_SFloat, GraphicsFormat.None);
             debugTexture.enableRandomWrite = true;
-            if(debugMaterial) debugMaterial.mainTexture = debugTexture;
+            debugMaterial.mainTexture = debugTexture;
 
             _rawDebugTextureData = new float[width * width];
             _debugTextureCPU = new Texture2D(width, width, TextureFormat.RFloat, false);
@@ -247,7 +248,7 @@ namespace Simulation
 
         private void InitMap()
         {
-            List<Vector4> vectors = new List<Vector4>() { new Vector4(50, 80, 1000.0f, 0) };
+            List<Vector4> vectors = new List<Vector4>() { new Vector4(40, 40, 5.0f, 0) };
             int setVectorKernel = baseShader.FindKernel("setVectorValues");
             baseShader.SetInt(_propiIDs[0], 1);
             baseShader.SetVectorArray(Shader.PropertyToID("vectors"), vectors.ToArray());
@@ -256,7 +257,7 @@ namespace Simulation
             
             //CopyTo(_values[Influence.Population], debugTexture, 1f);
 
-            int noiseWidth = (int)(width * 0.1f);
+            int noiseWidth = (int)(width * noiseSize);
             float[] noise = new float[noiseWidth * noiseWidth];
             for (var i = 0; i < noise.Length; i++)
             {
