@@ -31,9 +31,9 @@ public class HolyPineapple : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 worldMousePosition = Input.mousePosition;
-        worldMousePosition.z = 100.0f;
         Camera camera = GetComponent<Camera>();
+        Vector3 worldMousePosition = Input.mousePosition;
+        worldMousePosition.z = Mathf.Max(Vector3.Distance(camera.transform.position, pineappleInstance.transform.position), 1.0f);
         worldMousePosition = camera.ScreenToWorldPoint(worldMousePosition);
 
         if(!isPlanted)
