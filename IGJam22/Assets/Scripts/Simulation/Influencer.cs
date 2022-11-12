@@ -8,7 +8,7 @@ namespace Simulation
         None,
         Weight,
         Population,
-        Pollution
+        Spirit 
     }
     
     [CreateAssetMenu(fileName = "Influencer", menuName = "Simulation/Influencer", order = 1)]

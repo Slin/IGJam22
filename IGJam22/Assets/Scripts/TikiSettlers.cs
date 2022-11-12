@@ -28,11 +28,13 @@ public class TikiSettlers : MonoBehaviour
 
     private Cell[] currentCells;
     private Simulation.ISimulation simulation;
+    private IslandBalance islandBalance; 
 
     // Start is called before the first frame update
     void Start()
     {
         simulation = GetComponent<Simulation.Simulation>();
+        islandBalance = transform.parent.gameObject.GetComponent<IslandBalance>();
         currentCells = new Cell[400];
         for(int i = 0; i < 400; i++)
         {
@@ -44,6 +46,8 @@ public class TikiSettlers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 weightVector = new Vector3(0.0f, 0.0f, 0.0f);
+
         for(int x = -10; x < 10; x++)
         {
             for(int y = -10; y < 10; y++)
@@ -63,6 +67,9 @@ public class TikiSettlers : MonoBehaviour
                 }
 
                 value /= 25.0f;
+
+                weightVector.x += y * Mathf.Min(value, 50.0f);
+                weightVector.z += x * Mathf.Min(value, 50.0f);
 
                 int index = (y + 10) * 20 + (x + 10);
                 PopulationState newState = PopulationState.None;
@@ -131,12 +138,14 @@ public class TikiSettlers : MonoBehaviour
                         houseInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
                         houseInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
                         RaycastHit hit;
-                        if(Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit))
+                        bool didHit = Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit);
+                        if(didHit)
                         {
                             houseInstance.transform.position -= houseInstance.transform.up * hit.distance;
                             currentCells[index].houseInstance = houseInstance;
                         }
-                        else
+
+                        if(!didHit || houseInstance.transform.localPosition.y < -30.0f)
                         {
                             Destroy(houseInstance);
                             currentCells[index].houseInstance = null;
@@ -147,5 +156,8 @@ public class TikiSettlers : MonoBehaviour
                 }
             }
         }
+
+        islandBalance.IslandAngle.x = Mathf.Clamp(weightVector.x * 0.001f, -15.0f, 15.0f);
+        islandBalance.IslandAngle.z = Mathf.Clamp(weightVector.z * 0.001f, -15.0f, 15.0f);
     }
 }
