@@ -128,8 +128,8 @@ MonoBehaviour:
   movementSpeed: 2
   rotationSpeed: 10
   zoomSpeed: 5
-  minDistance: 50
-  maxDistance: 400
+  minDistance: 30
+  maxDistance: 300
   minAngle: 35
   maxAngle: 80
   scrollBorderWidth: 20
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b80c29bf063c94813ba7694eec26d86b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pinapplePrefab: {fileID: 2252212982013116998, guid: 810b8411b5e9e40b7904267fa4131cbc,
+  pinapplePrefab: {fileID: 2139364257008327693, guid: 810b8411b5e9e40b7904267fa4131cbc,
     type: 3}
   totemPrefab: {fileID: 3048497235714461271, guid: 74a3c6b733946409fadd931f72dbae07,
     type: 3}
