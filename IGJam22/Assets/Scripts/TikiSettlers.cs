@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class TikiSettlers : MonoBehaviour
 {
-    public GameObject tentPrefab;
-
-    private enum PopulationState
+    public enum PopulationState
     {
         None,
         Settler,
@@ -16,14 +14,28 @@ public class TikiSettlers : MonoBehaviour
         Skyscraper
     }
 
-    private PopulationState[] currentPopulation;
+    public struct Cell
+    {
+        public PopulationState populationState;
+        public GameObject houseInstance;
+    }
+
+    public GameObject tentPrefab;
+    public GameObject skyscraperPrefab;
+
+    private Cell[] currentCells;
     private Simulation.ISimulation simulation;
 
     // Start is called before the first frame update
     void Start()
     {
         simulation = GetComponent<Simulation.Simulation>();
-        currentPopulation = new PopulationState[400];
+        currentCells = new Cell[400];
+        for(int i = 0; i < 400; i++)
+        {
+            currentCells[i].populationState = PopulationState.None;
+            currentCells[i].houseInstance = null;
+        }
     }
 
     // Update is called once per frame
@@ -51,7 +63,7 @@ public class TikiSettlers : MonoBehaviour
 
                 int index = (y + 10) * 20 + (x + 10);
                 PopulationState newState = PopulationState.None;
-                PopulationState oldState = currentPopulation[index];
+                PopulationState oldState = currentCells[index].populationState;
 
                 if(value > 2.0f)
                 {
@@ -76,23 +88,41 @@ public class TikiSettlers : MonoBehaviour
 
                 if(newState > oldState)
                 {
+                    if(currentCells[index].houseInstance && newState == PopulationState.Skyscraper)
+                    {
+                        Destroy(currentCells[index].houseInstance);
+                        currentCells[index].houseInstance = null;
+                    }
+
                     if(newState == PopulationState.Tent)
                     {
-                        GameObject tentInstance = Instantiate(tentPrefab);
-                        tentInstance.transform.parent = transform;
-                        tentInstance.transform.localPosition = new Vector3(x*15.0f + Random.Range(0.0f, 10.0f), 200, y*15.0f + Random.Range(0.0f, 10.0f));
-                        tentInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
+                        currentCells[index].houseInstance = Instantiate(tentPrefab);
+                    }
+                    else if(newState == PopulationState.Skyscraper)
+                    {
+                        currentCells[index].houseInstance = Instantiate(skyscraperPrefab);
+                    }
+
+                    if(currentCells[index].houseInstance)
+                    {
+                        GameObject houseInstance = currentCells[index].houseInstance;
+                        houseInstance.transform.parent = transform;
+                        houseInstance.transform.localPosition = new Vector3(x*15.0f + Random.Range(0.0f, 10.0f), 200, y*15.0f + Random.Range(0.0f, 10.0f));
+                        houseInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
                         RaycastHit hit;
-                        if(Physics.Raycast(tentInstance.transform.position, -transform.up, out hit))
+                        if(Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit))
                         {
-                            tentInstance.transform.localPosition -= transform.up * hit.distance;
+                            houseInstance.transform.localPosition -= houseInstance.transform.up * hit.distance;
+                            currentCells[index].houseInstance = houseInstance;
                         }
                         else
                         {
-                            Destroy(tentInstance);
+                            Destroy(houseInstance);
+                            currentCells[index].houseInstance = null;
                         }
                     }
-                    currentPopulation[index] = newState;
+
+                    currentCells[index].populationState = newState;
                 }
             }
         }
