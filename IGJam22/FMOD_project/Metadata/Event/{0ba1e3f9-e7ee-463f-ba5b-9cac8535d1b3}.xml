@@ -5,7 +5,7 @@
 			<value>Rock_fall</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{a49496ff-c858-4a08-bdc7-308c46c10449}</destination>
@@ -54,7 +54,7 @@
 			<destination>{b668cf6a-cf97-4ec5-a189-c176d62116d9}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{0d97da80-95ac-419d-8b27-0512dcb3f485}</destination>
+			<destination>{cd2dbb53-9f53-4a5c-b91a-1cf0aee7f8a1}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{4fe800ed-1ca4-4396-b1d7-b27ccdb4313b}" />
@@ -145,7 +145,6 @@
 	<object class="MixerBusEffectChain" id="{f81d2f8e-3e7e-4b99-9b99-306175a7f486}">
 		<relationship name="effects">
 			<destination>{829b025c-fb22-411d-bb23-6d21bd9987da}</destination>
-			<destination>{f4139377-6f1f-4eee-b775-0961de08f383}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{5aa09172-5079-4094-873c-93f2045000fd}" />
@@ -163,7 +162,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{9b470600-aea6-440a-90ec-871ca47760a0}" />
 	<object class="MixerBusFader" id="{829b025c-fb22-411d-bb23-6d21bd9987da}" />
-	<object class="SpatialiserEffect" id="{f4139377-6f1f-4eee-b775-0961de08f383}" />
 	<object class="MixerBusFader" id="{5d548129-5909-496a-8a55-97c45a6f2291}" />
 	<object class="MixerBusFader" id="{d569f667-f8e0-4e56-b305-5bee18b19dea}" />
 </objects>
