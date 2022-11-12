@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &5950130 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2296967281755279551, guid: 0a7c84d5171d843cb8a724bd8d47ed81,
+    type: 3}
+  m_PrefabInstance: {fileID: 887804261}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &496760885
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,3 +537,77 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ea19824f9f4f434aaa6b31170c8656d, type: 3}
+--- !u!1001 &9074559151271211189
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4449905906225578782, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 5950130}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855360, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074559152430855364, guid: 8a85c9a869ee34369a73915e931a8dd0,
+        type: 3}
+      propertyPath: m_Name
+      value: TotemSelectionBubble
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8a85c9a869ee34369a73915e931a8dd0, type: 3}

@@ -130,7 +130,7 @@ MonoBehaviour:
   zoomSpeed: 5
   minDistance: 50
   maxDistance: 400
-  minAngle: 20
+  minAngle: 35
   maxAngle: 80
   scrollBorderWidth: 20
   minPosition: {x: -200, y: -200}
