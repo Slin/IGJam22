@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{0a4ca2ab-1841-415d-85f8-722a71613642}">
 		<property name="assetPath">
-			<value>prayer_opening.wav</value>
+			<value>Sounds/prayer_opening.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>44.0999985</value>

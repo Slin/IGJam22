@@ -5,7 +5,7 @@
 			<value>Ambiance</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{d80b0d14-fcee-4355-a1c1-240e21b184a3}</destination>
@@ -109,7 +109,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{4c2da38b-fe5e-4c17-9b69-3f3184dfa68a}">
 		<property name="volume">
-			<value>-9.5</value>
+			<value>-14.5</value>
 		</property>
 		<property name="name">
 			<value>Audio 1</value>
@@ -142,7 +142,6 @@
 		<relationship name="effects">
 			<destination>{326d37ea-d2d6-442e-a7c6-d4f297b4b461}</destination>
 			<destination>{b4be6f3b-3255-46a2-b3c0-cd0b056fc3c1}</destination>
-			<destination>{621a8ae1-b3ca-4afa-aaf2-8e87e127c12e}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{07896c8c-bc90-4867-8516-35ad600f288c}" />
@@ -156,18 +155,10 @@
 	<object class="MixerBusPanner" id="{526007c8-bdf7-45b0-a2ba-931c98cbadd1}" />
 	<object class="GainEffect" id="{326d37ea-d2d6-442e-a7c6-d4f297b4b461}">
 		<property name="gain">
-			<value>-14.5</value>
+			<value>-4</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{b4be6f3b-3255-46a2-b3c0-cd0b056fc3c1}" />
-	<object class="SpatialiserEffect" id="{621a8ae1-b3ca-4afa-aaf2-8e87e127c12e}">
-		<property name="minimumDistance">
-			<value>8.80000019</value>
-		</property>
-		<property name="maximumDistance">
-			<value>495</value>
-		</property>
-	</object>
 	<object class="ThreeEQEffect" id="{a89b6f85-9cad-4deb-9e08-54cb02e68043}">
 		<property name="midGain">
 			<value>-8</value>

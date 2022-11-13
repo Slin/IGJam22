@@ -63,7 +63,7 @@
 	</object>
 	<object class="EventAutomatableProperties" id="{75ebfc1e-772f-41bc-9932-bce52e22e1d2}">
 		<property name="maxVoices">
-			<value>34</value>
+			<value>25</value>
 		</property>
 		<property name="maximumDistance">
 			<value>150</value>
@@ -288,7 +288,7 @@
 	</object>
 	<object class="GainEffect" id="{7b02ad9c-c349-475a-adec-1c02569eeb25}">
 		<property name="gain">
-			<value>-18</value>
+			<value>-10</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{1d79909e-8565-453a-b390-f381b700e9c2}" />
