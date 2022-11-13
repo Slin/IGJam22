@@ -32,13 +32,12 @@ Shader "Unlit/BaseMapDebug"
 
 			sampler2D _Population;
 			sampler2D _Spirit;
-			float4 _MainTex_ST;
 			
 			v2f vert (appdata v)
 			{
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				o.uv = v.uv;//TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}
 			
@@ -47,6 +46,8 @@ Shader "Unlit/BaseMapDebug"
 				// sample the texture
 				fixed4 col = fixed4(tex2D(_Population, float2(1, 1) - i.uv).r / 1000.0f,
 					tex2D(_Spirit, float2(1, 1) - i.uv).r / 1000.0f, -tex2D(_Spirit, float2(1, 1) - i.uv).r / 1000.0f, 1.0f);
+				// fixed4 col = fixed4(tex2D(_Population, float2(1, 1) - i.uv).r / 1000.0f,
+				// 	0.0f, 0.0f, 1.0f);
 				return col;
 			}
 			ENDCG
