@@ -223,9 +223,10 @@ namespace Simulation
 
         public void SetValue(Influence influence, int x, int y, float strength, float radius)
         {
+            Vector2Int coords = IslandCoordsToSimulationSpace(x, y);
             Vector2Int dispatch = GetDispatchSize(_setPointID);
-            baseShader.SetInt(_propiIDs[0], x);
-            baseShader.SetInt(_propiIDs[1], y);
+            baseShader.SetInt(_propiIDs[0], coords.x);
+            baseShader.SetInt(_propiIDs[1], coords.y);
             baseShader.SetFloat(_propIDs[0], strength);
             baseShader.SetFloat(_propIDs[1], radius);
             baseShader.SetTexture(_setPointID, _targetBufferID, _values[influence]);
@@ -352,7 +353,7 @@ namespace Simulation
             {
                 CopyTo(target, _tmpTex);
             }
-            
+
             shader.SetTexture(kernelID, _targetBufferID, useTmpTexture ? _tmpTex : target);
             Vector2Int dispatchSize = GetDispatchSize(kernelID);
             shader.SetTexture(kernelID, _sourceABufferID, sourceA);
