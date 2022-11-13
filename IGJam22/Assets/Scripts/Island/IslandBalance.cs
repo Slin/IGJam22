@@ -16,6 +16,6 @@ public class IslandBalance : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.rotation = Quaternion.Slerp(gameObject.transform.rotation , Quaternion.Euler(IslandAngle), Time.deltaTime*Speed); 
+        transform.rotation = Quaternion.Slerp(transform.rotation , Quaternion.Euler(IslandAngle), Time.deltaTime*Speed); 
     }
 }

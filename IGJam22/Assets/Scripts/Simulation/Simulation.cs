@@ -346,7 +346,7 @@ namespace Simulation
         private Texture2D noiseTexture;
         private void AddNoise()
         {
-            int noiseWidth = (int)(width * 0.5f);
+            int noiseWidth = (int)(width);
             float[] noise = new float[noiseWidth * noiseWidth];
             
 
