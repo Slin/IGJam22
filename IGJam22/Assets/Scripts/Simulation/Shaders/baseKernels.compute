@@ -78,7 +78,7 @@ void debugOut(uint3 id : SV_DispatchThreadID)
 [numthreads(GS2,GS2,1)]
 void populate(uint3 id : SV_DispatchThreadID)
 {
-    target[id.xy] = sourceA[id.xy] + timeStep * sourceA[id.xy] * a;
+    target[id.xy] = target[id.xy] + timeStep * sourceA[id.xy] * a;
 }
 
 float sigmoid(float x, float slope, float activationPoint)
