@@ -16,6 +16,10 @@
 #pragma kernel minSource
 #pragma kernel populateConstant
 #pragma kernel addConstant
+#pragma kernel scale
+#pragma kernel cube
+#pragma kernel discretise
+#pragma kernel subtract2
 
 #define GS1 256
 #define GS2 8
@@ -94,7 +98,9 @@ void populateConstant(uint3 id : SV_DispatchThreadID)
 [numthreads(GS2,GS2,1)]
 void addConstant(uint3 id : SV_DispatchThreadID)
 {
-    target[id.xy] = target[id.xy] + timeStep * a;
+    float2 uv = float2((float)id.x / width, (float)id.y / width);
+    float noise = (inTexture.SampleLevel(linearClampSampler, uv, 0) + 30.0f) / 60.0f +1.0f;
+    target[id.xy] = target[id.xy] + clamp(sign(target[id.xy]), -1.0f, 0.0f) * timeStep * a * noise;
 }
 
 float sigmoid(float x, float slope, float activationPoint)
@@ -103,8 +109,8 @@ float sigmoid(float x, float slope, float activationPoint)
 }
 
 
-#define SPREAD(offset, cfact) pollutionInfluence = mask[id.xy + offset] * sigmoid(sourceA[id.xy + offset], c, b); \
-val += sourceA[id.xy + offset] * pollutionInfluence * cfact; \
+#define SPREAD(offset, cfact) populationInfluence = mask[id.xy + offset] * sigmoid(sourceA[id.xy + offset], c, b); \
+val += sourceA[id.xy + offset] * populationInfluence * clamp((sourceB[id.xy + offset]), 0.2f, 0.9f) * cfact; \
 fact += cfact;
 // a diffusion factor
 // b population activation offset
@@ -115,7 +121,7 @@ void spread(uint3 id : SV_DispatchThreadID)
     float fact = 0;
     float val = 0;
     uint2 offset;
-    float pollutionInfluence;
+    float populationInfluence;
     //-x
     if(id.xy[0] > 0)
     {
@@ -247,6 +253,12 @@ void subtract(uint3 id : SV_DispatchThreadID)
 }
 
 [numthreads(GS2,GS2,1)]
+void subtract2(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] + sourceA[id.xy] * a;
+}
+
+[numthreads(GS2,GS2,1)]
 void subtractSource(uint3 id : SV_DispatchThreadID)
 {
     target[id.xy] = sourceA[id.xy] - sourceB[id.xy];
@@ -274,4 +286,22 @@ void setPoint(uint3 id : SV_DispatchThreadID)
     float2 pos = float2(id.xy);
     float strength = max(abs(b) - length(center - pos), 0.0f) * slope;
     target[id.xy] = target[id.xy] + s * strength;
+}
+
+[numthreads(GS2,GS2,1)]
+void scale(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] * a;
+}
+
+[numthreads(GS2,GS2,1)]
+void cube(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = sign(target[id.xy]) * target[id.xy] * target[id.xy];
+}
+
+[numthreads(GS2,GS2,1)]
+void discretise(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = clamp(target[id.xy], 0.0f, 1.0f);
 }

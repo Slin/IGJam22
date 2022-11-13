@@ -18,6 +18,6 @@ public class WorshipOMeter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         textmeshPro.SetText("Worship-O-Meter: {0:0}", settlers.worshipOMeter);
+         textmeshPro.SetText("{0:0}", settlers.worshipOMeter);
     }
 }
