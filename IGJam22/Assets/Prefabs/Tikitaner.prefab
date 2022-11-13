@@ -65,7 +65,7 @@ MonoBehaviour:
       Data2: 1292522843
       Data3: 433766785
       Data4: -1024321219
-    Path: event:/Ambiance/Peaceful_crowd
+    Path: event:/Ambiance/Crowd
   Event: 
   PlayEvent: 1
   StopEvent: 2
@@ -75,7 +75,7 @@ MonoBehaviour:
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  OverrideMaxDistance: 150
 --- !u!1001 &3382073628160246093
 PrefabInstance:
   m_ObjectHideFlags: 0
