@@ -3,7 +3,12 @@ guid: 194ecde22bf4645738ac7bdb1f8c8b96
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Pineapple
+    second: {fileID: 2100000, guid: a58805c06b279a7468ae55afb36dc00a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

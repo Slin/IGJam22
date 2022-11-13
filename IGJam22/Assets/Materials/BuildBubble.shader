@@ -35,7 +35,7 @@ Shader "Unlit/BuildBubble"
             {
                 float4 viewNormal : TEXCOORD0;
                 float4 viewPosition : TEXCOORD1;
-                UNITY_FOG_COORDS(1)
+                UNITY_FOG_COORDS(2)
                 float4 vertex : SV_POSITION;
             };
 

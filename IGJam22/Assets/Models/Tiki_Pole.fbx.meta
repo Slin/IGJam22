@@ -3,7 +3,12 @@ guid: ced9c03de723647248f8506236e6455c
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tiki
+    second: {fileID: 2100000, guid: 85b9928353e0a084fa77a56ea3f6ce9a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
