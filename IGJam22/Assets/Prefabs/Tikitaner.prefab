@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3135138351102667948}
   - component: {fileID: 53038654715664051}
+  - component: {fileID: -5610364286667979731}
   m_Layer: 0
   m_Name: Tikitaner
   m_TagString: Untagged
@@ -45,6 +46,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f6e49a22dd94d018f35c5a775c4416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5610364286667979731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875757927295835468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 633516535
+      Data2: 1292522843
+      Data3: 433766785
+      Data4: -1024321219
+    Path: event:/Ambiance/Peaceful_crowd
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &3382073628160246093
 PrefabInstance:
   m_ObjectHideFlags: 0
