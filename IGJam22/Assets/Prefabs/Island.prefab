@@ -5037,8 +5037,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59fd357014412574eb16edb86e7b7b38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatingAngle: 5
-  speed: 0.5
+  floatingAngle: 3
+  speed: 0.1
 --- !u!114 &1116510122422249387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5079,7 +5079,7 @@ MonoBehaviour:
   migrationStart: 150
   noiseSize: 0.1
   noiseScale: 30
-  timeScale: 5
+  timeScale: 0.001
   _miniBuffer: {fileID: 0}
   debugTexture: {fileID: 0}
   debugMaterial: {fileID: 0}
