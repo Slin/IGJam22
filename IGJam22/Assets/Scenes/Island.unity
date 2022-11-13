@@ -579,5 +579,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Island
       objectReference: {fileID: 0}
+    - target: {fileID: 7360757807904934283, guid: 0ea19824f9f4f434aaa6b31170c8656d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c5af93ef315445c43ada2258a68e9978, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ea19824f9f4f434aaa6b31170c8656d, type: 3}
