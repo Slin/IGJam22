@@ -5052,6 +5052,7 @@ MonoBehaviour:
   influencers:
   - {fileID: 11400000, guid: 4ba601d7402e0417ea4901be873c99f9, type: 2}
   - {fileID: 11400000, guid: 0ddb0858087a44eac9921d767fb28e36, type: 2}
+  - {fileID: 11400000, guid: 713e2741743714e3383cbb73c7b08b2a, type: 2}
 --- !u!1001 &1737020958137604558
 PrefabInstance:
   m_ObjectHideFlags: 0
