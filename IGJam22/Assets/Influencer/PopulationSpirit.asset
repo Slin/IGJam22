@@ -18,6 +18,6 @@ MonoBehaviour:
   argDescription:
   - polution to spirit ratio
   args:
-  - -0.8
+  - -0.5
   shader: {fileID: 7200000, guid: cc3ddb25b3db4445d8bea82cf3ba5ca3, type: 3}
   kernel: populate
