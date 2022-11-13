@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TikiSettlers : MonoBehaviour
 {
@@ -37,13 +38,11 @@ public class TikiSettlers : MonoBehaviour
     private Simulation.ISimulation simulation;
     private IslandBalance islandBalance;
     private float loseCounter = 0.0f;
-    private FMOD.Studio.EventInstance panicMusic;
+    private bool didLoose = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        panicMusic = FMODUnity.RuntimeManager.CreateInstance("event:/Music/Disaster_music");
-
         simulation = GetComponent<Simulation.Simulation>();
         islandBalance = transform.parent.gameObject.GetComponent<IslandBalance>();
         currentCells = new Cell[400];
@@ -57,6 +56,16 @@ public class TikiSettlers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(didLoose)
+        {
+            loseCounter += Time.deltaTime;
+            if(loseCounter > 10.0f || Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene("IntroMenu", LoadSceneMode.Single);
+            }
+            return;
+        }
+
         Vector3 weightVector = new Vector3(0.0f, 0.0f, 0.0f);
         float totalPopulation = 0.0f;
 
@@ -200,22 +209,20 @@ public class TikiSettlers : MonoBehaviour
         worshipOMeter += totalPopulation * Time.deltaTime * 0.01f;
         popOMeter = totalPopulation;
 
-        if(weightVector.magnitude > 100.0f)//15000.0f)
+        if(weightVector.magnitude > 1000.0f)//15000.0f)
         {
-            panicMusic.start();
-            //panicMusic.release();
-
             loseCounter += Time.deltaTime;
 
             if(loseCounter > 15.0f)
             {
                 islandBalance.IslandAngle.x = 180.0f;
                 islandBalance.IslandAngle.z = 0.0f;
+                loseCounter = 0.0f;
+                didLoose = true;
             }
         }
         else
         {
-            panicMusic.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             if(loseCounter > 0.0f) loseCounter -= Time.deltaTime;
         }
     }
