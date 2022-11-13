@@ -58,6 +58,7 @@ namespace Simulation
         private int _subtractAndClampID;
         private int _subtractID;
         private int _multiplyID;
+        private int _setPointID;
         
         private bool _loadInProgress;
         private float _t1;
@@ -110,6 +111,7 @@ namespace Simulation
             _subtractAndClampID = baseShader.FindKernel("subtractAndClamp");
             _subtractID = baseShader.FindKernel("subtract");
             _multiplyID = baseShader.FindKernel("multiply");
+            _setPointID = baseShader.FindKernel("setPoint");
 
             _values = new Dictionary<Influence, RenderTexture>();
             foreach(Influence influence in Enum.GetValues(typeof(Influence)))
@@ -139,7 +141,6 @@ namespace Simulation
             _debugTextureCPU = new Texture2D(width, width, TextureFormat.RFloat, false);
 
             InitMap();
-            SimulationStep(1.0f);
             //ReadDebugTexture();
         }
 
@@ -222,6 +223,13 @@ namespace Simulation
 
         public void SetValue(Influence influence, int x, int y, float strength, float radius)
         {
+            Vector2Int dispatch = GetDispatchSize(_setPointID);
+            baseShader.SetInt(_propiIDs[0], x);
+            baseShader.SetInt(_propiIDs[1], y);
+            baseShader.SetFloat(_propIDs[0], strength);
+            baseShader.SetFloat(_propIDs[1], radius);
+            baseShader.SetTexture(_setPointID, _targetBufferID, _values[influence]);
+            baseShader.Dispatch(_setPointID, dispatch.x, dispatch.y, 1);
         }
 
         public Vector2Int IslandCoordsToSimulationSpace(int x, int y)
@@ -280,7 +288,9 @@ namespace Simulation
             Vector2Int dispatchSize = GetDispatchSize(copyKernel);
             baseShader.Dispatch(copyKernel, dispatchSize.x, dispatchSize.y, 1);
             
-            //CopyTo(_values[Influence.Spirit], debugTexture);
+            // SetValue(Influence.Spirit, 20, 30, -1000, 5);
+
+            // CopyTo(_values[Influence.Spirit], debugTexture);
             
             // Graphics.CopyTexture(_copyBuffer, _values[Influence.Spirit]);
             // _copyBuffer.Apply();
@@ -379,7 +389,7 @@ namespace Simulation
             {
                 return;
             }
-            // Debug.Log($"Volume to migrate: {volumeToMigrate}");
+            Debug.Log($"Volume to migrate: {volumeToMigrate}");
 
             float x = 0;
             for (int i = 0; i < 10; i++)

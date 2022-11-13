@@ -11,6 +11,7 @@
 #pragma kernel subtractAndClamp
 #pragma kernel subtract
 #pragma kernel multiply
+#pragma kernel setPoint
 
 #define GS1 256
 #define GS2 8
@@ -233,4 +234,16 @@ void subtract(uint3 id : SV_DispatchThreadID)
 void multiply(uint3 id : SV_DispatchThreadID)
 {
     target[id.xy] = target[id.xy] * mask[id.xy];
+}
+
+// ai x, bi y, a strength, b radius
+[numthreads(GS2,GS2,1)]
+void setPoint(uint3 id : SV_DispatchThreadID)
+{
+    float2 center = float2((float)ai, (float)bi);
+    float s = sign(b);
+    float slope = a / abs(b);
+    float2 pos = float2(id.xy);
+    float strength = max(abs(b) - length(center - pos), 0.0f) * slope;
+    target[id.xy] = target[id.xy] + s * strength;
 }
