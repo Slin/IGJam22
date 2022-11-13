@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HolyPineapple : MonoBehaviour
 {
+    public float costTotem = 50000;
+    public float costTree = 5000;
+
     public GameObject pinapplePrefab;
 
     public GameObject totemPrefab;
@@ -20,20 +23,23 @@ public class HolyPineapple : MonoBehaviour
 
     private GameObject totemBubbleInstance;
     private GameObject treeBubbleInstance;
+    private TikiSettlers settlers;
 
     // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;
         pineappleInstance = Instantiate(pinapplePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        settlers = FindObjectOfType<TikiSettlers>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Camera camera = GetComponent<Camera>();
+        float cameraDistance = Mathf.Max(Vector3.Distance(camera.transform.position, pineappleInstance.transform.position), 1.0f);
         Vector3 worldMousePosition = Input.mousePosition;
-        worldMousePosition.z = Mathf.Max(Vector3.Distance(camera.transform.position, pineappleInstance.transform.position), 1.0f);
+        worldMousePosition.z = cameraDistance;
         worldMousePosition = camera.ScreenToWorldPoint(worldMousePosition);
 
         if(!isPlanted)
@@ -92,21 +98,37 @@ public class HolyPineapple : MonoBehaviour
         else
         {
             GameObject objectToCreate = null;
-            if(Vector3.Distance(totemBubbleInstance.transform.position, worldMousePosition) < Vector3.Distance(treeBubbleInstance.transform.position, worldMousePosition))
+            float cost = 0.0f;
+
+            float distanceToTotem = Vector3.Distance(totemBubbleInstance.transform.position, worldMousePosition);
+            float distanceToTree = Vector3.Distance(treeBubbleInstance.transform.position, worldMousePosition);
+            if(Mathf.Min(distanceToTotem) < 0.5f * cameraDistance)
             {
-                objectToCreate = totemPrefab;
-                totemBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", Color.white);
-                treeBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", new Color(1 / 255.0f, 127 / 255.0f, 142 / 255.0f, 1.0f));
+                if(distanceToTotem < distanceToTree)
+                {
+                    cost = costTotem;
+                    objectToCreate = totemPrefab;
+                    totemBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", (cost <= settlers.worshipOMeter)? Color.white : Color.red);
+                    treeBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", new Color(1 / 255.0f, 127 / 255.0f, 142 / 255.0f, 1.0f));
+                }
+                else
+                {
+                    cost = costTree;
+                    objectToCreate = treePrefab;
+                    totemBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", new Color(1 / 255.0f, 127 / 255.0f, 142 / 255.0f, 1.0f));
+                    treeBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", (cost <= settlers.worshipOMeter)? Color.white : Color.red);
+                }
             }
             else
             {
-                objectToCreate = treePrefab;
                 totemBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", new Color(1 / 255.0f, 127 / 255.0f, 142 / 255.0f, 1.0f));
-                treeBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", Color.white);
+                treeBubbleInstance.GetComponent<Renderer>().material.SetColor("_GlowColor", new Color(1 / 255.0f, 127 / 255.0f, 142 / 255.0f, 1.0f));
             }
 
-            if(Input.GetKeyDown(KeyCode.Mouse0))
+            if(Input.GetKeyDown(KeyCode.Mouse0) && (settlers.worshipOMeter >= cost || !objectToCreate))
             {
+                settlers.worshipOMeter -= cost;
+
                 Destroy(totemBubbleInstance);
                 Destroy(treeBubbleInstance);
 
