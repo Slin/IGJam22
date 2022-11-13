@@ -40,9 +40,14 @@ public class TikiSettlers : MonoBehaviour
     private float loseCounter = 0.0f;
     private bool didLoose = false;
 
+    private FMODUnity.StudioEventEmitter musicEmitter;
+
     // Start is called before the first frame update
     void Start()
     {
+        GameObject musicEmitterObject = GameObject.Find("Main_theme");
+        musicEmitter = musicEmitterObject.GetComponent<FMODUnity.StudioEventEmitter>();
+
         simulation = GetComponent<Simulation.Simulation>();
         islandBalance = transform.parent.gameObject.GetComponent<IslandBalance>();
         currentCells = new Cell[400];
@@ -225,5 +230,7 @@ public class TikiSettlers : MonoBehaviour
         {
             if(loseCounter > 0.0f) loseCounter -= Time.deltaTime;
         }
+
+        musicEmitter.SetParameter("panic", loseCounter / 15.0f);
     }
 }
