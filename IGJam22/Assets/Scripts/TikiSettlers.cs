@@ -218,7 +218,7 @@ public class TikiSettlers : MonoBehaviour
         {
             loseCounter += Time.deltaTime;
 
-            if(loseCounter > 15.0f)
+            if(false && loseCounter > 1500000.0f)
             {
                 islandBalance.IslandAngle.x = 180.0f;
                 islandBalance.IslandAngle.z = 0.0f;
