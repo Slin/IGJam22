@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HolyPineapple : MonoBehaviour
 {
-    public float costTotem = 50000;
-    public float costTree = 5000;
+    public float costTotem = 100;
+    public float costTree = 20;
 
     public GameObject pinapplePrefab;
 
@@ -127,8 +127,6 @@ public class HolyPineapple : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.Mouse0) && (settlers.worshipOMeter >= cost || !objectToCreate))
             {
-                settlers.worshipOMeter -= cost;
-
                 Destroy(totemBubbleInstance);
                 Destroy(treeBubbleInstance);
 
@@ -138,6 +136,11 @@ public class HolyPineapple : MonoBehaviour
                     TikiTotemSpawn totemSpawn = totem.GetComponent<TikiTotemSpawn>();
                     totemSpawn.playerCamera = playerCamera;
                     totem.transform.position = pineappleInstance.transform.position + Vector3.up * 500.0f; //Start above the click position to then fall from the sky
+
+                    settlers.worshipOMeter -= cost;
+
+                    if(objectToCreate == totemPrefab) costTotem += costTotem;
+                    else if(objectToCreate == treePrefab) costTree += costTree;
                 }
 
                 isPlanted = false;

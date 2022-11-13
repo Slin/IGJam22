@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{c76b42a1-f691-45a0-8e90-10fdf957b1a6}">
 		<property name="assetPath">
-			<value>volcano.ogg</value>
+			<value>Ambience/volcano.ogg</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>
