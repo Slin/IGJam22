@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Simulation
 {
     public interface ISimulation
@@ -11,5 +13,9 @@ namespace Simulation
         /// <param name="value">Output float value</param>
         /// <returns>Returns true if a value is currently available.</returns>
         public bool GetValue(Influence influence, int x, int y, out float value);
+
+        public void SetValue(Influence influence, int x, int y, float strength, float radius);
+
+        public RenderTexture GetTexture(Influence influence);
     }
 }

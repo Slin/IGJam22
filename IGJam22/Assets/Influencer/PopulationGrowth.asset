@@ -17,7 +17,9 @@ MonoBehaviour:
   sourceBID: 0
   argDescription:
   - population growth
+  - population growth max
   args:
-  - 0.15
+  - 0.1
+  - 100
   shader: {fileID: 7200000, guid: cc3ddb25b3db4445d8bea82cf3ba5ca3, type: 3}
-  kernel: populate
+  kernel: populateConstant

@@ -1,10 +1,25 @@
-#pragma use_dxc 
+//#pragma use_dxc 
 #pragma kernel copyTextureToF
 #pragma kernel populate
 #pragma kernel spread
 #pragma kernel setVectorValues
 #pragma kernel copy
+#pragma kernel set
 #pragma kernel sampleTexture
+#pragma kernel reduceGroups
+#pragma kernel combineReduceResults
+#pragma kernel subtractAndClamp
+#pragma kernel subtract
+#pragma kernel multiply
+#pragma kernel setPoint
+#pragma kernel subtractSource
+#pragma kernel minSource
+#pragma kernel populateConstant
+#pragma kernel addConstant
+
+#define GS1 256
+#define GS2 8
+#define D1ToD2(d1) uint2((d1) % width, (d1) / width)
 
 static const float pi = 3.14159265;
 static const float e = 2.71828183;
@@ -25,36 +40,61 @@ int ai, bi, ci;
 float4 vectors[256];
 
 // a scale
-[numthreads(8, 8, 1)]
+[numthreads(GS2, GS2, 1)]
 void copy(uint3 id : SV_DispatchThreadID)
 {
-    target[id.xy] = sourceA[id.xy] * a;
+    if(id.y * width + id.x < ai)
+    {
+        target[id.xy] = sourceA[id.xy] * a;
+    }
 }
 
-[numthreads(8,8,1)]
+// a setValue
+[numthreads(GS2, GS2, 1)]
+void set(uint3 id : SV_DispatchThreadID)
+{
+    if(id.y * width + id.x < ai)
+    {
+        target[id.xy] = a;
+    }
+}
+
+[numthreads(GS2,GS2,1)]
 void sampleTexture(uint3 id : SV_DispatchThreadID)
 {
     float2 uv = float2((float)id.x / width, (float)id.y / width);
     target[id.xy] = inTexture.SampleLevel(linearClampSampler, uv, 0);
 }
 
-[numthreads(8,8,1)]
+[numthreads(GS2,GS2,1)]
 void copyTextureToF (uint3 id : SV_DispatchThreadID)
 {
     target[id.xy] = inTexture[id.xy];
 }
 
-[numthreads(8,8,1)]
+[numthreads(GS2,GS2,1)]
 void debugOut(uint3 id : SV_DispatchThreadID)
 {
     outDebug[id.xy]= sourceA[id.xy];
 }
 
 // a population growth factor
-[numthreads(8,8,1)]
+[numthreads(GS2,GS2,1)]
 void populate(uint3 id : SV_DispatchThreadID)
 {
-    target[id.xy] = sourceA[id.xy] + timeStep * sourceA[id.xy] * a;
+    target[id.xy] = target[id.xy] + timeStep * sourceA[id.xy] * a;
+}
+
+[numthreads(GS2,GS2,1)]
+void populateConstant(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] + timeStep * a * clamp(target[id.xy], 0.0f, b);
+}
+
+[numthreads(GS2,GS2,1)]
+void addConstant(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] + timeStep * a;
 }
 
 float sigmoid(float x, float slope, float activationPoint)
@@ -69,7 +109,7 @@ fact += cfact;
 // a diffusion factor
 // b population activation offset
 // c population activation slope
-[numthreads(8,8,1)]
+[numthreads(GS2,GS2,1)]
 void spread(uint3 id : SV_DispatchThreadID)
 {
     float fact = 0;
@@ -136,7 +176,7 @@ void spread(uint3 id : SV_DispatchThreadID)
     }
 }
 
-[numthreads(8,1,1)]
+[numthreads(GS2,1,1)]
 void setVectorValues(uint3 id : SV_DispatchThreadID)
 {
     if(id.x < ai)
@@ -144,4 +184,94 @@ void setVectorValues(uint3 id : SV_DispatchThreadID)
         uint2 uv = vectors[id.x].xy;
         target[uv] = vectors[id.x].z;
     }
+}
+
+[numthreads(GS2,GS2,1)]
+void subtractAndClamp(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = max(sourceA[id.xy] - a, 0.0f);
+}
+
+groupshared float data[GS1*2];
+[numthreads(GS1,1,1)]
+void reduceGroups(uint3 id : SV_GroupThreadID, uint3 gid : SV_GroupID)
+{
+    int max = ai;
+    int go = GS1 * 2;
+    
+    if(gid.x * go + id.x < max)
+    {
+        data[id.x] = target[D1ToD2(gid.x * go + id.x)];
+    } else
+    {
+        data[id.x] = 0.0f;
+    }
+    if(gid.x * go + id.x + GS1 < max)
+    {
+        data[GS1 + id.x] = target[D1ToD2(gid.x * go + id.x + GS1)];
+    } else
+    {
+        data[GS1 + id.x] = 0.0f;
+    }
+    
+    for(int hdim = GS1; hdim > 0; hdim = hdim / 2)
+    {
+        if(id.x < hdim)
+        {
+            data[id.x] = data[id.x] + data[id.x + hdim];
+        }
+        AllMemoryBarrierWithGroupSync();
+    }
+    
+    if(id.x == 0)
+    {
+        target[D1ToD2(gid.x * go)] = data[0];
+    }
+}
+
+[numthreads(GS1,1,1)]
+void combineReduceResults(uint3 id : SV_GroupThreadID)
+{
+    int max = width * width;
+    int stride = GS1 * 2;
+    if(id.x * stride < max)
+    {
+        target[D1ToD2(id.x)] = sourceA[D1ToD2(id.x * stride)];
+    }
+}
+
+[numthreads(GS2,GS2,1)]
+void subtract(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] - sourceA[id.xy] * a;
+}
+
+[numthreads(GS2,GS2,1)]
+void subtractSource(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = sourceA[id.xy] - sourceB[id.xy];
+}
+
+[numthreads(GS2,GS2,1)]
+void minSource(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = min(sourceA[id.xy], sourceB[id.xy]);
+}
+
+[numthreads(GS2,GS2,1)]
+void multiply(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] * mask[id.xy];
+}
+
+// ai x, bi y, a strength, b radius
+[numthreads(GS2,GS2,1)]
+void setPoint(uint3 id : SV_DispatchThreadID)
+{
+    float2 center = float2((float)ai, (float)bi);
+    float s = sign(b);
+    float slope = a / abs(b);
+    float2 pos = float2(id.xy);
+    float strength = max(abs(b) - length(center - pos), 0.0f) * slope;
+    target[id.xy] = target[id.xy] + s * strength;
 }
