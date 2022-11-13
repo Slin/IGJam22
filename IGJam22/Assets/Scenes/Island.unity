@@ -572,6 +572,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6875017468936582488, guid: 0a7c84d5171d843cb8a724bd8d47ed81,
         type: 3}
+      propertyPath: costTree
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6875017468936582488, guid: 0a7c84d5171d843cb8a724bd8d47ed81,
+        type: 3}
+      propertyPath: costTotem
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6875017468936582488, guid: 0a7c84d5171d843cb8a724bd8d47ed81,
+        type: 3}
       propertyPath: islandInstance
       value: 
       objectReference: {fileID: 0}
