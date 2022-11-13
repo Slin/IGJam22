@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
+  isTotem: 1
 --- !u!114 &-3448403689136006129
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -104,27 +104,27 @@ public class TikiSettlers : MonoBehaviour
                 PopulationState newState = PopulationState.None;
                 PopulationState oldState = currentCells[index].populationState;
 
-                if(value > 20.0f)
+                if(value > 10.0f)
                 {
                     newState = PopulationState.Settler;
                 }
-                if(value > 50.0f)
+                if(value > 25.0f)
                 {
                     newState = PopulationState.Settler2;
                 }
-                if(value > 100.0f)
+                if(value > 50.0f)
                 {
                     newState = PopulationState.Tent;
                 }
-                if(value > 1000.0f)
+                if(value > 200.0f)
                 {
                     newState = PopulationState.House;
                 }
-                if(value > 10000.0f)
+                if(value > 500.0f)
                 {
                     newState = PopulationState.Skyscraper;
                 }
-                if(value > 50000.0f)
+                if(value > 2000.0f)
                 {
                     newState = PopulationState.Skyscraper2;
                 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class TikiTotemSpawn : MonoBehaviour
 {
     public PlayerCamera playerCamera;
+    public bool isTotem = false;
     private float fallSpeed = 500.0f;
     private bool isFalling = true;
     private Simulation.ISimulation simulation;
@@ -37,8 +38,15 @@ public class TikiTotemSpawn : MonoBehaviour
                 simulationPosition.y = 0.0f;
                 simulationPosition.x /= 18.0f / 5.0f;
                 simulationPosition.z /= 18.0f / 5.0f;
-                print(simulationPosition);
-                simulation.SetValue(Simulation.Influence.Spirit, (int)simulationPosition.x, (int)simulationPosition.z, 10000.0f, 5.0f);
+
+                if(!isTotem)
+                {
+                    simulation.SetValue(Simulation.Influence.Spirit, (int)simulationPosition.x, (int)simulationPosition.z, 10000.0f, 5.0f);
+                }
+                else
+                {
+                    simulation.SetValue(Simulation.Influence.Spirit, (int)simulationPosition.x, (int)simulationPosition.z, 20000.0f, 8.0f);
+                }
             }
             else if(transform.position.y < 0.0f)
             {
