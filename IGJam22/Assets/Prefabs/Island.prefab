@@ -5055,12 +5055,15 @@ MonoBehaviour:
   baseShader: {fileID: 7200000, guid: cc3ddb25b3db4445d8bea82cf3ba5ca3, type: 3}
   migrationStart: 50000
   noiseSize: 0.05
+  noiseScale: 30
   _miniBuffer: {fileID: 0}
   debugTexture: {fileID: 0}
   debugMaterial: {fileID: 0}
   influencers:
   - {fileID: 11400000, guid: 4ba601d7402e0417ea4901be873c99f9, type: 2}
   - {fileID: 11400000, guid: 0ddb0858087a44eac9921d767fb28e36, type: 2}
+  - {fileID: 11400000, guid: 713e2741743714e3383cbb73c7b08b2a, type: 2}
+  - {fileID: 11400000, guid: ce1f2e0fe46b74fc390749d02494da5b, type: 2}
 --- !u!1001 &1644297097988486445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5138,6 +5141,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 69a855e8c4bb1dd458c14eaba024a370,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9040a53e40c6ca44497dfb7d56b0f70f, type: 2}
     - target: {fileID: 919132149155446097, guid: 69a855e8c4bb1dd458c14eaba024a370,
         type: 3}
       propertyPath: m_Name
@@ -5171,6 +5179,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5115796548206632475, guid: 69a855e8c4bb1dd458c14eaba024a370, type: 3}
+--- !u!114 &2986256560456577972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1878245884773402748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d02e6ab594ffa43f4b527006abf55eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8207598784674911503
 PrefabInstance:
   m_ObjectHideFlags: 0
