@@ -5053,8 +5053,8 @@ MonoBehaviour:
   width: 100
   worldMask: {fileID: 2800000, guid: 489422e1f90b34366ac1d93eaeff152c, type: 3}
   baseShader: {fileID: 7200000, guid: cc3ddb25b3db4445d8bea82cf3ba5ca3, type: 3}
-  migrationStart: 50000
-  noiseSize: 0.05
+  migrationStart: 1500
+  noiseSize: 0.1
   noiseScale: 30
   _miniBuffer: {fileID: 0}
   debugTexture: {fileID: 0}
@@ -5063,7 +5063,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4ba601d7402e0417ea4901be873c99f9, type: 2}
   - {fileID: 11400000, guid: 0ddb0858087a44eac9921d767fb28e36, type: 2}
   - {fileID: 11400000, guid: 713e2741743714e3383cbb73c7b08b2a, type: 2}
-  - {fileID: 11400000, guid: ce1f2e0fe46b74fc390749d02494da5b, type: 2}
 --- !u!1001 &1644297097988486445
 PrefabInstance:
   m_ObjectHideFlags: 0
