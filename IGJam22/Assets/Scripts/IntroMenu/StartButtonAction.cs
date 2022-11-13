@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class StartButtonAction : MonoBehaviour
 {
+    public GameObject ExplainScreen;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,5 +23,11 @@ public class StartButtonAction : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene("Island");
+    }
+
+    public void StartExplain()
+    {
+        ExplainScreen.SetActive(true);
+        gameObject.SetActive(false);
     }
 }
