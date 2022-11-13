@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Palm
+    second: {fileID: 2100000, guid: f35a0eab3c88e1043af0d68d0c2698f3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Tent
     second: {fileID: 2100000, guid: f35a0eab3c88e1043af0d68d0c2698f3, type: 2}
   materials:
