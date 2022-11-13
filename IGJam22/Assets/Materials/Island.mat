@@ -38,8 +38,16 @@ Material:
         m_Texture: {fileID: 2800000, guid: f64e276cee2be475f803ad546bdd2c43, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Blend:
+        m_Texture: {fileID: 2800000, guid: 489422e1f90b34366ac1d93eaeff152c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Clean:
+        m_Texture: {fileID: 2800000, guid: f64e276cee2be475f803ad546bdd2c43, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -59,6 +67,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DirtTex:
+        m_Texture: {fileID: 2800000, guid: c5c0d3c31e1964151893b6f7e71091e3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Dirty:
         m_Texture: {fileID: 2800000, guid: c5c0d3c31e1964151893b6f7e71091e3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -127,9 +139,12 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _valueFactor: -0.00001
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _multiplier: {r: 0.0025, g: 0.0025, b: 0, a: 0}
+    - _offset: {r: 190, g: 177, b: 0, a: 0}
   m_BuildTextureStacks: []
