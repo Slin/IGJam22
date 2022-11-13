@@ -11,7 +11,8 @@ public class TikiSettlers : MonoBehaviour
         Settler2,
         Tent,
         House,
-        Skyscraper
+        Skyscraper,
+        Skyscraper2
     }
 
     public struct Cell
@@ -27,17 +28,22 @@ public class TikiSettlers : MonoBehaviour
     public GameObject tentPrefab;
     public GameObject housePrefab;
     public GameObject skyscraperPrefab;
+    public GameObject skyscraper2Prefab;
 
     public float worshipOMeter = 0.0f;
     public float popOMeter = 0.0f;
 
     private Cell[] currentCells;
     private Simulation.ISimulation simulation;
-    private IslandBalance islandBalance; 
+    private IslandBalance islandBalance;
+    private float loseCounter = 0.0f;
+    private FMOD.Studio.EventInstance panicMusic;
 
     // Start is called before the first frame update
     void Start()
     {
+        panicMusic = FMODUnity.RuntimeManager.CreateInstance("event:/Music/Disaster_music");
+
         simulation = GetComponent<Simulation.Simulation>();
         islandBalance = transform.parent.gameObject.GetComponent<IslandBalance>();
         currentCells = new Cell[400];
@@ -76,32 +82,36 @@ public class TikiSettlers : MonoBehaviour
 
                 totalPopulation += value;
 
-                weightVector.x += y * Mathf.Min(value, 50.0f);
-                weightVector.z += x * Mathf.Min(value, 50.0f);
+                weightVector.x += y * Mathf.Min(value, 100.0f);
+                weightVector.z += x * Mathf.Min(value, 100.0f);
 
                 int index = (y + 10) * 20 + (x + 10);
                 PopulationState newState = PopulationState.None;
                 PopulationState oldState = currentCells[index].populationState;
 
-                if(value > 200.0f)
+                if(value > 20.0f)
                 {
                     newState = PopulationState.Settler;
                 }
-                if(value > 500.0f)
+                if(value > 50.0f)
                 {
                     newState = PopulationState.Settler2;
                 }
-                if(value > 1000.0f)
+                if(value > 100.0f)
                 {
                     newState = PopulationState.Tent;
                 }
-                if(value > 10000.0f)
+                if(value > 1000.0f)
                 {
                     newState = PopulationState.House;
                 }
-                if(value > 100000.0f)
+                if(value > 10000.0f)
                 {
                     newState = PopulationState.Skyscraper;
+                }
+                if(value > 50000.0f)
+                {
+                    newState = PopulationState.Skyscraper2;
                 }
 
                 if(newState != oldState)
@@ -151,6 +161,10 @@ public class TikiSettlers : MonoBehaviour
                         {
                             currentCells[index].houseInstance = Instantiate(skyscraperPrefab);
                         }
+                        else if(newState == PopulationState.Skyscraper2)
+                        {
+                            currentCells[index].houseInstance = Instantiate(skyscraper2Prefab);
+                        }
 
                         if(currentCells[index].houseInstance)
                         {
@@ -185,5 +199,24 @@ public class TikiSettlers : MonoBehaviour
 
         worshipOMeter += totalPopulation * Time.deltaTime * 0.01f;
         popOMeter = totalPopulation;
+
+        if(weightVector.magnitude > 100.0f)//15000.0f)
+        {
+            panicMusic.start();
+            //panicMusic.release();
+
+            loseCounter += Time.deltaTime;
+
+            if(loseCounter > 15.0f)
+            {
+                islandBalance.IslandAngle.x = 180.0f;
+                islandBalance.IslandAngle.z = 0.0f;
+            }
+        }
+        else
+        {
+            panicMusic.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            if(loseCounter > 0.0f) loseCounter -= Time.deltaTime;
+        }
     }
 }

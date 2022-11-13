@@ -16,7 +16,7 @@ public class IslandIdle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startRotation = Quaternion.Euler(Vector3.up);
+        startRotation = Quaternion.identity;
     }
 
     // Update is called once per frame
@@ -31,7 +31,7 @@ public class IslandIdle : MonoBehaviour
             time -= Time.deltaTime*speed;
         }
         if (time != 0)
-            gameObject.transform.rotation = Quaternion.Slerp(startRotation, endRotation, time);
+            transform.localRotation = Quaternion.Slerp(startRotation, endRotation, time);
         if (time >= 1)
         {
             backRotation = true;
@@ -39,7 +39,7 @@ public class IslandIdle : MonoBehaviour
         if (backRotation && time <= 0)
         {
             backRotation = false;
-            endRotation = Quaternion.Euler(Vector3.up) * Quaternion.AngleAxis(floatingAngle, new Vector3(Random.value*2-1,0,Random.value*2-1).normalized);
+            endRotation = Quaternion.AngleAxis(floatingAngle, new Vector3(Random.value*2-1,0,Random.value*2-1).normalized);
         }
     }
 }
