@@ -61,7 +61,7 @@
 			<value>150</value>
 		</property>
 		<property name="maximumDistance">
-			<value>250</value>
+			<value>500</value>
 		</property>
 	</object>
 	<object class="MarkerTrack" id="{793118fa-649f-48df-849f-532496d91b80}" />
@@ -136,6 +136,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{1d28f332-5de5-4e28-badb-79c8ca5c9e6a}">
 		<relationship name="effects">
+			<destination>{e4d031cc-1b7b-4f9e-a9e2-0c910bd76a3a}</destination>
 			<destination>{b567de47-5ea7-4b4a-8414-424244ff42d4}</destination>
 			<destination>{3a048182-d427-46d5-8f14-d35bc81bbb82}</destination>
 		</relationship>
@@ -149,13 +150,18 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{4aa2bcb2-7630-41c6-ab71-37d34f38457a}" />
+	<object class="GainEffect" id="{e4d031cc-1b7b-4f9e-a9e2-0c910bd76a3a}">
+		<property name="gain">
+			<value>10</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{b567de47-5ea7-4b4a-8414-424244ff42d4}" />
 	<object class="SpatialiserEffect" id="{3a048182-d427-46d5-8f14-d35bc81bbb82}">
 		<property name="minimumDistance">
 			<value>150</value>
 		</property>
 		<property name="maximumDistance">
-			<value>250</value>
+			<value>500</value>
 		</property>
 	</object>
 	<object class="GainEffect" id="{ae8c778d-32e7-4733-8419-1b08f6470768}">
