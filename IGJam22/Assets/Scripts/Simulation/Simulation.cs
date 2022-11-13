@@ -18,6 +18,7 @@ namespace Simulation
         public float noiseSize = 0.1f;
         public float noiseScale = 30.0f;
         public float timeScale = 0.1f;
+        public float rNoiseFactor = 1.0f;
         
         // Weight, Pollution, population, nature?
         private Dictionary<Influence, RenderTexture> _values;
@@ -280,7 +281,7 @@ namespace Simulation
 
         private void InitMap()
         {
-            List<Vector4> vectors = new List<Vector4>() { new Vector4(50, 80, 1000.0f, 0) };
+            List<Vector4> vectors = new List<Vector4>() { new Vector4(50, 80, 10000.0f, 0) };
             int setVectorKernel = baseShader.FindKernel("setVectorValues");
             baseShader.SetInt(_propiIDs[0], 1);
             baseShader.SetVectorArray(Shader.PropertyToID("vectors"), vectors.ToArray());
@@ -343,24 +344,26 @@ namespace Simulation
         }
 
         private int ctr = 0;
-        private Texture2D noiseTexture;
+        private Texture2D runningNoise;
+        private NativeArray<float> rNoiseBuffer;
+        float[] rnoiseRaw;
         private void AddNoise()
         {
-            int noiseWidth = (int)(width);
-            float[] noise = new float[noiseWidth * noiseWidth];
-            
-
-            Texture2D noiseTexture = new Texture2D(noiseWidth, noiseWidth, TextureFormat.RFloat, false);
-            NativeArray<float> noiseBuffer = noiseTexture.GetRawTextureData<float>();
             if (ctr == 0)
             {
-                for (var i = 0; i < noise.Length; i++)
+                int noiseWidth = (int)(width * 0.1f);
+                rnoiseRaw = new float[noiseWidth * noiseWidth];
+                runningNoise = new Texture2D(noiseWidth, noiseWidth, TextureFormat.RFloat, false);
+                
+                for (var i = 0; i < rnoiseRaw.Length; i++)
                 {
-                    noise[i] = Random.Range(-noiseScale, noiseScale);
+                    rnoiseRaw[i] = Random.value;
                 }
-                noiseBuffer.CopyFrom(noise);
-                noiseTexture.SetPixelData(noiseBuffer, 0);
-                noiseTexture.Apply();
+
+                rNoiseBuffer = runningNoise.GetRawTextureData<float>();
+                rNoiseBuffer.CopyFrom(rnoiseRaw);
+                runningNoise.SetPixelData(rNoiseBuffer, 0);
+                runningNoise.Apply();
                 ctr = 1000;
                 Debug.Log("Noise Regen");
             }
@@ -369,10 +372,11 @@ namespace Simulation
                 ctr--;
             }
 
-            int copyKernel = baseShader.FindKernel("addConstant");
+            int copyKernel = baseShader.FindKernel("addNoise");
             int textureID = Shader.PropertyToID("inTexture");
-            baseShader.SetFloat(_propIDs[0], 0.01f);
-            baseShader.SetTexture(copyKernel, textureID, noiseTexture);
+            baseShader.SetFloat(_propIDs[0], rNoiseFactor);
+            baseShader.SetFloat(_timeStepPropID, Time.deltaTime);
+            baseShader.SetTexture(copyKernel, textureID, runningNoise);
             baseShader.SetTexture(copyKernel, _targetBufferID, _values[Influence.Spirit]);
             Vector2Int dispatchSize = GetDispatchSize(copyKernel);
             baseShader.Dispatch(copyKernel, dispatchSize.x, dispatchSize.y, 1);
