@@ -38,7 +38,8 @@ public class TikiSettlers : MonoBehaviour
     private Simulation.ISimulation simulation;
     private IslandBalance islandBalance;
     private float loseCounter = 0.0f;
-    private bool didLoose = false;
+    public bool didLoose = false;
+    public bool didWin = false;
 
     private FMODUnity.StudioEventEmitter musicEmitter;
 
@@ -61,7 +62,7 @@ public class TikiSettlers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(didLoose)
+        if(didLoose || didWin)
         {
             loseCounter += Time.deltaTime;
             if(loseCounter > 10.0f || Input.GetKeyDown(KeyCode.Space))
@@ -214,7 +215,7 @@ public class TikiSettlers : MonoBehaviour
         worshipOMeter += totalPopulation * Time.deltaTime * 0.01f;
         popOMeter = totalPopulation;
 
-        if(weightVector.magnitude > 1000.0f)//15000.0f)
+        if(weightVector.magnitude > 15000.0f)
         {
             loseCounter += Time.deltaTime;
 
@@ -229,6 +230,12 @@ public class TikiSettlers : MonoBehaviour
         else
         {
             if(loseCounter > 0.0f) loseCounter -= Time.deltaTime;
+        }
+
+        if(!didLoose && worshipOMeter > 100000)
+        {
+            didWin = true;
+            loseCounter = 0.0f;
         }
 
         musicEmitter.SetParameter("panic", loseCounter / 15.0f);
