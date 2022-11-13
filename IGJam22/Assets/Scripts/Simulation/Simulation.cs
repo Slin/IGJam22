@@ -281,7 +281,13 @@ namespace Simulation
 
         private void InitMap()
         {
-            List<Vector4> vectors = new List<Vector4>() { new Vector4(50, 80, 10000.0f, 0) };
+            List<Vector4> vectors = new List<Vector4>()
+            {
+                new Vector4(50, 80, 20000.0f, 0),
+                new Vector4(51, 80, 20000.0f, 0),
+                new Vector4(51, 81, 20000.0f, 0),
+                new Vector4(50, 81, 20000.0f, 0)
+            };
             int setVectorKernel = baseShader.FindKernel("setVectorValues");
             baseShader.SetInt(_propiIDs[0], 1);
             baseShader.SetVectorArray(Shader.PropertyToID("vectors"), vectors.ToArray());
