@@ -5,7 +5,7 @@
 			<value>Disaster_music</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{042a7db0-4d3f-4ae0-a645-efd2a80eb075}</destination>
@@ -24,6 +24,7 @@
 		</relationship>
 		<relationship name="markerTracks">
 			<destination>{b16bb5b5-f66b-4e65-a7e5-fbdb6d240c09}</destination>
+			<destination>{b47b1624-d281-4035-bae0-b57bf64b7322}</destination>
 		</relationship>
 		<relationship name="groupTracks">
 			<destination>{2f32e73c-0626-4823-99cb-ca55916578ab}</destination>
@@ -58,6 +59,7 @@
 	</object>
 	<object class="EventAutomatableProperties" id="{000051df-fd4e-4937-8a06-c84b0c5bb65f}" />
 	<object class="MarkerTrack" id="{b16bb5b5-f66b-4e65-a7e5-fbdb6d240c09}" />
+	<object class="MarkerTrack" id="{b47b1624-d281-4035-bae0-b57bf64b7322}" />
 	<object class="GroupTrack" id="{2f32e73c-0626-4823-99cb-ca55916578ab}">
 		<relationship name="modules">
 			<destination>{729cabcf-1bb1-45c8-a594-0f9ae901af34}</destination>
@@ -139,13 +141,12 @@
 			<destination>{08643fd1-4d1c-47a1-8ee3-e4f585d115f8}</destination>
 		</relationship>
 		<relationship name="markerTrack">
-			<destination>{b16bb5b5-f66b-4e65-a7e5-fbdb6d240c09}</destination>
+			<destination>{b47b1624-d281-4035-bae0-b57bf64b7322}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{8a6fa263-3312-49ff-9b72-7d7cc43448f4}">
 		<relationship name="effects">
 			<destination>{a1f41720-cd42-4359-ba2d-24cfbaf0ba53}</destination>
-			<destination>{1e6f8930-8738-474e-a64a-c0c7b44201d3}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{be98e0b0-7960-4aaf-b095-79f860dc3133}" />
@@ -157,6 +158,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{b3ce7c77-f7e8-445a-a31b-94ff42caaa94}" />
 	<object class="MixerBusFader" id="{a1f41720-cd42-4359-ba2d-24cfbaf0ba53}" />
-	<object class="SpatialiserEffect" id="{1e6f8930-8738-474e-a64a-c0c7b44201d3}" />
 	<object class="MixerBusFader" id="{7f8cc849-a3e8-48f3-89dd-33a63640d985}" />
 </objects>

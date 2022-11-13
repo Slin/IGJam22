@@ -20,6 +20,7 @@
 #pragma kernel cube
 #pragma kernel discretise
 #pragma kernel subtract2
+#pragma kernel addNoise
 
 #define GS1 256
 #define GS2 8
@@ -101,6 +102,14 @@ void addConstant(uint3 id : SV_DispatchThreadID)
     float2 uv = float2((float)id.x / width, (float)id.y / width);
     float noise = (inTexture.SampleLevel(linearClampSampler, uv, 0) + 30.0f) / 60.0f +1.0f;
     target[id.xy] = target[id.xy] + clamp(sign(target[id.xy]), -1.0f, 0.0f) * timeStep * a * noise;
+}
+
+[numthreads(GS2,GS2,1)]
+void addNoise(uint3 id : SV_DispatchThreadID)
+{
+    float2 uv = float2((float)id.x / width, (float)id.y / width);
+    float noise = inTexture.SampleLevel(linearClampSampler, uv, 0) + 1.0f;
+    target[id.xy] = target[id.xy] + noise * a * timeStep;
 }
 
 float sigmoid(float x, float slope, float activationPoint)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TikiSettlers : MonoBehaviour
 {
@@ -11,13 +12,16 @@ public class TikiSettlers : MonoBehaviour
         Settler2,
         Tent,
         House,
-        Skyscraper
+        Skyscraper,
+        Skyscraper2
     }
 
     public struct Cell
     {
         public PopulationState populationState;
         public GameObject houseInstance;
+        public GameObject settler1Instance;
+        public GameObject settler2Instance;
     }
 
     public GameObject settlerPrefab;
@@ -25,17 +29,25 @@ public class TikiSettlers : MonoBehaviour
     public GameObject tentPrefab;
     public GameObject housePrefab;
     public GameObject skyscraperPrefab;
+    public GameObject skyscraper2Prefab;
 
     public float worshipOMeter = 0.0f;
     public float popOMeter = 0.0f;
 
     private Cell[] currentCells;
     private Simulation.ISimulation simulation;
-    private IslandBalance islandBalance; 
+    private IslandBalance islandBalance;
+    private float loseCounter = 0.0f;
+    private bool didLoose = false;
+
+    private FMODUnity.StudioEventEmitter musicEmitter;
 
     // Start is called before the first frame update
     void Start()
     {
+        GameObject musicEmitterObject = GameObject.Find("Main_theme");
+        musicEmitter = musicEmitterObject.GetComponent<FMODUnity.StudioEventEmitter>();
+
         simulation = GetComponent<Simulation.Simulation>();
         islandBalance = transform.parent.gameObject.GetComponent<IslandBalance>();
         currentCells = new Cell[400];
@@ -49,6 +61,16 @@ public class TikiSettlers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(didLoose)
+        {
+            loseCounter += Time.deltaTime;
+            if(loseCounter > 10.0f || Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene("IntroMenu", LoadSceneMode.Single);
+            }
+            return;
+        }
+
         Vector3 weightVector = new Vector3(0.0f, 0.0f, 0.0f);
         float totalPopulation = 0.0f;
 
@@ -74,8 +96,8 @@ public class TikiSettlers : MonoBehaviour
 
                 totalPopulation += value;
 
-                weightVector.x += y * Mathf.Min(value, 50.0f);
-                weightVector.z += x * Mathf.Min(value, 50.0f);
+                weightVector.x += y * Mathf.Min(value, 100.0f);
+                weightVector.z += x * Mathf.Min(value, 100.0f);
 
                 int index = (y + 10) * 20 + (x + 10);
                 PopulationState newState = PopulationState.None;
@@ -101,60 +123,83 @@ public class TikiSettlers : MonoBehaviour
                 {
                     newState = PopulationState.Skyscraper;
                 }
-
-                if(newState > oldState)
+                if(value > 50000.0f)
                 {
-                    if(currentCells[index].houseInstance && (newState == PopulationState.Skyscraper || newState == PopulationState.House))
+                    newState = PopulationState.Skyscraper2;
+                }
+
+                if(newState != oldState)
+                {
+                    if(currentCells[index].houseInstance)
                     {
                         Destroy(currentCells[index].houseInstance);
                         currentCells[index].houseInstance = null;
                     }
 
-                    if(newState == PopulationState.Settler || newState == PopulationState.Settler2)
+                    if(currentCells[index].settler1Instance && newState < PopulationState.Settler)
                     {
-                        GameObject settlerInstance = Instantiate(settlerPrefab);
-                        settlerInstance.transform.parent = transform;
-                        settlerInstance.transform.localPosition = new Vector3(x*18.0f + Random.Range(0.0f, 15.0f), 200, y*18.0f + Random.Range(0.0f, 15.0f));
-                        settlerInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
-                        settlerInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
-                        RaycastHit hit;
-                        if(Physics.Raycast(settlerInstance.transform.position, -settlerInstance.transform.up, out hit))
-                        {
-                            settlerInstance.transform.position -= settlerInstance.transform.up * hit.distance;
-                        }
-                    }
-                    else if(newState == PopulationState.Tent)
-                    {
-                        currentCells[index].houseInstance = Instantiate(tentPrefab);
-                    }
-                    else if(newState == PopulationState.House)
-                    {
-                        currentCells[index].houseInstance = Instantiate(housePrefab);
-                    }
-                    else if(newState == PopulationState.Skyscraper)
-                    {
-                        currentCells[index].houseInstance = Instantiate(skyscraperPrefab);
+                        Destroy(currentCells[index].settler1Instance);
+                        currentCells[index].settler1Instance = null;
                     }
 
-                    if(currentCells[index].houseInstance)
+                    if(currentCells[index].settler2Instance && newState < PopulationState.Settler2)
                     {
-                        GameObject houseInstance = currentCells[index].houseInstance;
-                        houseInstance.transform.parent = transform;
-                        houseInstance.transform.localPosition = new Vector3(x*18.0f + Random.Range(0.0f, 15.0f), 200, y*18.0f + Random.Range(0.0f, 15.0f));
-                        houseInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
-                        houseInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
-                        RaycastHit hit;
-                        bool didHit = Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit);
-                        if(didHit)
+                        Destroy(currentCells[index].settler2Instance);
+                        currentCells[index].settler2Instance = null;
+                    }
+
+                    if(newState > oldState)
+                    {
+                        if(newState == PopulationState.Settler || newState == PopulationState.Settler2)
                         {
-                            houseInstance.transform.position -= houseInstance.transform.up * hit.distance;
-                            currentCells[index].houseInstance = houseInstance;
+                            GameObject settlerInstance = Instantiate(settlerPrefab);
+                            settlerInstance.transform.parent = transform;
+                            settlerInstance.transform.localPosition = new Vector3(x*18.0f + Random.Range(0.0f, 15.0f), 200, y*18.0f + Random.Range(0.0f, 15.0f));
+                            settlerInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
+                            settlerInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
+                            RaycastHit hit;
+                            if(Physics.Raycast(settlerInstance.transform.position, -settlerInstance.transform.up, out hit))
+                            {
+                                settlerInstance.transform.position -= settlerInstance.transform.up * hit.distance;
+                            }
+                        }
+                        else if(newState == PopulationState.Tent)
+                        {
+                            currentCells[index].houseInstance = Instantiate(tentPrefab);
+                        }
+                        else if(newState == PopulationState.House)
+                        {
+                            currentCells[index].houseInstance = Instantiate(housePrefab);
+                        }
+                        else if(newState == PopulationState.Skyscraper)
+                        {
+                            currentCells[index].houseInstance = Instantiate(skyscraperPrefab);
+                        }
+                        else if(newState == PopulationState.Skyscraper2)
+                        {
+                            currentCells[index].houseInstance = Instantiate(skyscraper2Prefab);
                         }
 
-                        if(!didHit || houseInstance.transform.localPosition.y < -30.0f)
+                        if(currentCells[index].houseInstance)
                         {
-                            Destroy(houseInstance);
-                            currentCells[index].houseInstance = null;
+                            GameObject houseInstance = currentCells[index].houseInstance;
+                            houseInstance.transform.parent = transform;
+                            houseInstance.transform.localPosition = new Vector3(x*18.0f + Random.Range(0.0f, 15.0f), 200, y*18.0f + Random.Range(0.0f, 15.0f));
+                            houseInstance.transform.localPosition += new Vector3(9.0f, 0.0f, 21.0f); //Additional offset to have everything on the island
+                            houseInstance.transform.localRotation = Quaternion.Euler(0.0f, Random.Range(0.0f, 360.0f), 0.0f);
+                            RaycastHit hit;
+                            bool didHit = Physics.Raycast(houseInstance.transform.position, -houseInstance.transform.up, out hit);
+                            if(didHit)
+                            {
+                                houseInstance.transform.position -= houseInstance.transform.up * hit.distance;
+                                currentCells[index].houseInstance = houseInstance;
+                            }
+
+                            if(!didHit || houseInstance.transform.localPosition.y < -30.0f)
+                            {
+                                Destroy(houseInstance);
+                                currentCells[index].houseInstance = null;
+                            }
                         }
                     }
 
@@ -168,5 +213,24 @@ public class TikiSettlers : MonoBehaviour
 
         worshipOMeter += totalPopulation * Time.deltaTime * 0.01f;
         popOMeter = totalPopulation;
+
+        if(weightVector.magnitude > 1000.0f)//15000.0f)
+        {
+            loseCounter += Time.deltaTime;
+
+            if(loseCounter > 15.0f)
+            {
+                islandBalance.IslandAngle.x = 180.0f;
+                islandBalance.IslandAngle.z = 0.0f;
+                loseCounter = 0.0f;
+                didLoose = true;
+            }
+        }
+        else
+        {
+            if(loseCounter > 0.0f) loseCounter -= Time.deltaTime;
+        }
+
+        musicEmitter.SetParameter("panic", loseCounter / 15.0f);
     }
 }
