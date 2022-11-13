@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Simulation
 {
     public interface ISimulation
@@ -13,5 +15,7 @@ namespace Simulation
         public bool GetValue(Influence influence, int x, int y, out float value);
 
         public void SetValue(Influence influence, int x, int y, float strength, float radius);
+
+        public RenderTexture GetTexture(Influence influence);
     }
 }

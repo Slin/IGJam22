@@ -1,4 +1,4 @@
-#pragma use_dxc 
+//#pragma use_dxc 
 #pragma kernel copyTextureToF
 #pragma kernel populate
 #pragma kernel spread
@@ -12,6 +12,10 @@
 #pragma kernel subtract
 #pragma kernel multiply
 #pragma kernel setPoint
+#pragma kernel subtractSource
+#pragma kernel minSource
+#pragma kernel populateConstant
+#pragma kernel addConstant
 
 #define GS1 256
 #define GS2 8
@@ -79,6 +83,18 @@ void debugOut(uint3 id : SV_DispatchThreadID)
 void populate(uint3 id : SV_DispatchThreadID)
 {
     target[id.xy] = target[id.xy] + timeStep * sourceA[id.xy] * a;
+}
+
+[numthreads(GS2,GS2,1)]
+void populateConstant(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] + timeStep * a * clamp(target[id.xy], 0.0f, b);
+}
+
+[numthreads(GS2,GS2,1)]
+void addConstant(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = target[id.xy] + timeStep * a;
 }
 
 float sigmoid(float x, float slope, float activationPoint)
@@ -228,6 +244,18 @@ void combineReduceResults(uint3 id : SV_GroupThreadID)
 void subtract(uint3 id : SV_DispatchThreadID)
 {
     target[id.xy] = target[id.xy] - sourceA[id.xy] * a;
+}
+
+[numthreads(GS2,GS2,1)]
+void subtractSource(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = sourceA[id.xy] - sourceB[id.xy];
+}
+
+[numthreads(GS2,GS2,1)]
+void minSource(uint3 id : SV_DispatchThreadID)
+{
+    target[id.xy] = min(sourceA[id.xy], sourceB[id.xy]);
 }
 
 [numthreads(GS2,GS2,1)]

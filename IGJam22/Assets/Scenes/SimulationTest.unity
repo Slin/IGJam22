@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 1234679566}
   - component: {fileID: 1234679565}
   - component: {fileID: 1234679564}
+  - component: {fileID: 1234679568}
   m_Layer: 0
   m_Name: map
   m_TagString: Untagged
@@ -454,6 +455,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1234679568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234679563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4645a5af00f94ff3b6037ad85714209d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetMat: {fileID: 0}
 --- !u!1 &1245000060
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,12 +502,15 @@ MonoBehaviour:
   baseShader: {fileID: 7200000, guid: cc3ddb25b3db4445d8bea82cf3ba5ca3, type: 3}
   migrationStart: 1500
   noiseSize: 0.1
+  noiseScale: 30
   _miniBuffer: {fileID: 0}
   debugTexture: {fileID: 8400000, guid: 3a42c10abdca343758bd628fb1f43dfd, type: 2}
   debugMaterial: {fileID: 2100000, guid: f10fcf448477248debc72f65b3ad934d, type: 2}
   influencers:
   - {fileID: 11400000, guid: 4ba601d7402e0417ea4901be873c99f9, type: 2}
   - {fileID: 11400000, guid: 0ddb0858087a44eac9921d767fb28e36, type: 2}
+  - {fileID: 11400000, guid: 713e2741743714e3383cbb73c7b08b2a, type: 2}
+  - {fileID: 11400000, guid: ce1f2e0fe46b74fc390749d02494da5b, type: 2}
 --- !u!4 &1245000063
 Transform:
   m_ObjectHideFlags: 0

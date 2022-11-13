@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60fa2ae2188c41578d10caf3147f99d2, type: 3}
-  m_Name: PopulationSpirit
+  m_Name: SpiritDegrowth
   m_EditorClassIdentifier: 
   targetID: 3
-  sourceAID: 2
+  sourceAID: 3
   sourceBID: 0
   argDescription:
-  - polution to spirit ratio
+  - degrowfactor
   args:
-  - -0.5
+  - 1
   shader: {fileID: 7200000, guid: cc3ddb25b3db4445d8bea82cf3ba5ca3, type: 3}
-  kernel: populate
+  kernel: addConstant

@@ -14,8 +14,9 @@ namespace Simulation
         public int width;
         public Texture2D worldMask;
         public ComputeShader baseShader;
-        public float migrationStart;
-        public float noiseSize;
+        public float migrationStart = 1500f;
+        public float noiseSize = 0.1f;
+        public float noiseScale = 30.0f;
         
         // Weight, Pollution, population, nature?
         private Dictionary<Influence, RenderTexture> _values;
@@ -59,6 +60,8 @@ namespace Simulation
         private int _subtractID;
         private int _multiplyID;
         private int _setPointID;
+        private int _subtractSourceID;
+        private int _minID;
         
         private bool _loadInProgress;
         private float _t1;
@@ -112,6 +115,8 @@ namespace Simulation
             _subtractID = baseShader.FindKernel("subtract");
             _multiplyID = baseShader.FindKernel("multiply");
             _setPointID = baseShader.FindKernel("setPoint");
+            _subtractSourceID = baseShader.FindKernel("subtractSource");
+            _minID = baseShader.FindKernel("minSource");
 
             _values = new Dictionary<Influence, RenderTexture>();
             foreach(Influence influence in Enum.GetValues(typeof(Influence)))
@@ -233,6 +238,8 @@ namespace Simulation
             baseShader.Dispatch(_setPointID, dispatch.x, dispatch.y, 1);
         }
 
+        public RenderTexture GetTexture(Influence influence) => _values[influence];
+
         public Vector2Int IslandCoordsToSimulationSpace(int x, int y)
         {
             return new Vector2Int(x + width / 2, y + width / 2);
@@ -274,7 +281,7 @@ namespace Simulation
             float[] noise = new float[noiseWidth * noiseWidth];
             for (var i = 0; i < noise.Length; i++)
             {
-                noise[i] = Random.Range(-10.0f, 10.0f);
+                noise[i] = Random.Range(-noiseScale, noiseScale);
             }
 
             Texture2D noiseTexture = new Texture2D(noiseWidth, noiseWidth, TextureFormat.RFloat, false);
@@ -317,8 +324,8 @@ namespace Simulation
 
             Migrate(migrationStart);
             // Reduce(_values[Influence.Population]);
-            CopyTo(_values[Influence.Population], debugTexture, 1f);
-            ReadDebugTexture();
+            //CopyTo(_values[Influence.Population], debugTexture, 1f);
+            //ReadDebugTexture();
         }
         
         private void CopyTo(Texture source, RenderTexture target, float scale=1.0f, int length=0)
@@ -380,19 +387,32 @@ namespace Simulation
         private void Migrate(float migrationThreshold)
         {
             Vector2Int dispatch = GetDispatchSize(_subtractAndClampID);
+            
+            baseShader.SetTexture(_subtractSourceID, _sourceABufferID, _values[Influence.Population]);
+            baseShader.SetTexture(_subtractSourceID, _sourceBBufferID, _values[Influence.Spirit]);
+            baseShader.SetTexture(_subtractSourceID, _targetBufferID, _tmpTex);
+            baseShader.Dispatch(_subtractSourceID, dispatch.x, dispatch.y, 1);
+            
             baseShader.SetFloat(_propIDs[0], migrationThreshold);
-            baseShader.SetTexture(_subtractAndClampID, _targetBufferID, _tmpTex);
-            baseShader.SetTexture(_subtractAndClampID, _sourceABufferID, _values[Influence.Population]);
+            baseShader.SetTexture(_subtractAndClampID, _targetBufferID, _tmpTex2);
+            baseShader.SetTexture(_subtractAndClampID, _sourceABufferID, _tmpTex);
             baseShader.Dispatch(_subtractAndClampID, dispatch.x, dispatch.y, 1);
-            CopyTo(_tmpTex, _tmpTex3);
+            
+            baseShader.SetTexture(_minID, _sourceABufferID, _tmpTex2);
+            baseShader.SetTexture(_minID, _sourceBBufferID, _values[Influence.Population]);
+            baseShader.SetTexture(_minID, _targetBufferID, _tmpTex3);
+            baseShader.Dispatch(_minID, dispatch.x, dispatch.y, 1);
+            ApplyMask(_tmpTex3);
+            CopyTo(_tmpTex3, _tmpTex);
+            
             float volumeToMigrate = Reduce(_tmpTex);
             if (volumeToMigrate < 10)
             {
                 return;
             }
-            Debug.Log($"Volume to migrate: {volumeToMigrate}");
+            // Debug.Log($"Volume to migrate: {volumeToMigrate}");
 
-            float x = 0;
+            float x = -100000.0f;
             for (int i = 0; i < 10; i++)
             {
                 CopyTo(_values[Influence.Spirit], _tmpTex);
