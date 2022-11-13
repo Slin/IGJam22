@@ -35,22 +35,22 @@ public class PlayerCamera : MonoBehaviour
     void Update()
     {
         Vector3 movement = new Vector3(0.0f, 0.0f, 0.0f);
-        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))// || Input.mousePosition.x < scrollBorderWidth)
+        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.mousePosition.x < scrollBorderWidth)
         {
             movement += -transform.right;
         }
 
-        if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))// || Input.mousePosition.x > Screen.width - scrollBorderWidth)
+        if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.mousePosition.x > Screen.width - scrollBorderWidth)
         {
             movement += transform.right;
         }
 
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))// || Input.mousePosition.y > Screen.height - scrollBorderWidth)
+        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.mousePosition.y > Screen.height - scrollBorderWidth)
         {
             movement += transform.forward;
         }
 
-        if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))// || Input.mousePosition.y < scrollBorderWidth)
+        if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || Input.mousePosition.y < scrollBorderWidth)
         {
             movement += -transform.forward;
         }

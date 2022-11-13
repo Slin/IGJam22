@@ -238,6 +238,6 @@ public class TikiSettlers : MonoBehaviour
             loseCounter = 0.0f;
         }
 
-        musicEmitter.SetParameter("panic", loseCounter / 15.0f);
+        musicEmitter.SetParameter("panic", loseCounter > 0.1f? 1.0f : 0.0f);// / 15.0f);
     }
 }

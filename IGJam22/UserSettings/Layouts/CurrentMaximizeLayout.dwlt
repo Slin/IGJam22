@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 12460
+  controlID: 36929
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -98,18 +98,18 @@ MonoBehaviour:
       y: 21
       width: 1041
       height: 503.5
-    m_Scale: {x: 2.43294, y: 2.43294}
-    m_Translation: {x: 536.4105, y: 254.70451}
+    m_Scale: {x: 2, y: 2}
+    m_Translation: {x: 520.5, y: 251.75}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -220.47832
-      y: -104.69001
-      width: 427.87738
-      height: 206.95126
+      x: -260.25
+      y: -125.875
+      width: 520.5
+      height: 251.75
     m_MinimalGUI: 1
   m_defaultScale: 2
   m_LastWindowPixelSize: {x: 2082, y: 1049}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 12461
+  controlID: 36930
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 12462
+  controlID: 36931
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -226,9 +226,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 6cf80000
+      m_SelectedIDs: 46790000
       m_LastClickedID: 0
-      m_ExpandedIDs: ac5ae5ffbc5ae5ff965ee5ff0ec7e8ff1ec7e8ff0cd20000d2e5000026e60000
+      m_ExpandedIDs: be18e2ffac5ae5ffbc5ae5ff965ee5ff0ec7e8ff1ec7e8ff0cd20000d2e5000026e60000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -401,7 +401,7 @@ MonoBehaviour:
       containerId: overlay-container--right
       floating: 0
       collapsed: 0
-      displayed: 0
+      displayed: 1
       snapOffset: {x: 0, y: 25}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
@@ -1719,21 +1719,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/slin/Dev/IGJam22/IGJam22
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 86.5}
-    m_SelectedIDs: 6a6d0000
-    m_LastClickedID: 28010
+    m_SelectedIDs: 686d0000
+    m_LastClickedID: 28008
     m_ExpandedIDs: 00000000426b00006a6d000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1762,7 +1762,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000426b000000ca9a3b
+    m_ExpandedIDs: 00000000426b00006a6d000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1787,8 +1787,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 6cf80000
-    m_LastClickedInstanceID: 63596
+    m_SelectedInstanceIDs: 46790000
+    m_LastClickedInstanceID: 31046
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300006caa000000000000
     m_RenameOverlay:
@@ -1866,8 +1866,8 @@ MonoBehaviour:
     y: 0
     width: 344
     height: 920
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
