@@ -26,6 +26,9 @@ public class TikiSettlers : MonoBehaviour
     public GameObject housePrefab;
     public GameObject skyscraperPrefab;
 
+    public float worshipOMeter = 0.0f;
+    public float popOMeter = 0.0f;
+
     private Cell[] currentCells;
     private Simulation.ISimulation simulation;
     private IslandBalance islandBalance; 
@@ -47,6 +50,7 @@ public class TikiSettlers : MonoBehaviour
     void Update()
     {
         Vector3 weightVector = new Vector3(0.0f, 0.0f, 0.0f);
+        float totalPopulation = 0.0f;
 
         for(int x = -10; x < 10; x++)
         {
@@ -67,6 +71,8 @@ public class TikiSettlers : MonoBehaviour
                 }
 
                 value /= 25.0f;
+
+                totalPopulation += value;
 
                 weightVector.x += y * Mathf.Min(value, 50.0f);
                 weightVector.z += x * Mathf.Min(value, 50.0f);
@@ -159,5 +165,8 @@ public class TikiSettlers : MonoBehaviour
 
         islandBalance.IslandAngle.x = Mathf.Clamp(weightVector.x * 0.001f, -15.0f, 15.0f);
         islandBalance.IslandAngle.z = Mathf.Clamp(weightVector.z * 0.001f, -15.0f, 15.0f);
+
+        worshipOMeter += totalPopulation * Time.deltaTime * 0.01f;
+        popOMeter = totalPopulation;
     }
 }
