@@ -5,7 +5,7 @@
 			<value>Disaster_music</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{042a7db0-4d3f-4ae0-a645-efd2a80eb075}</destination>
@@ -145,7 +145,6 @@
 	<object class="MixerBusEffectChain" id="{8a6fa263-3312-49ff-9b72-7d7cc43448f4}">
 		<relationship name="effects">
 			<destination>{a1f41720-cd42-4359-ba2d-24cfbaf0ba53}</destination>
-			<destination>{1e6f8930-8738-474e-a64a-c0c7b44201d3}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{be98e0b0-7960-4aaf-b095-79f860dc3133}" />
@@ -157,6 +156,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{b3ce7c77-f7e8-445a-a31b-94ff42caaa94}" />
 	<object class="MixerBusFader" id="{a1f41720-cd42-4359-ba2d-24cfbaf0ba53}" />
-	<object class="SpatialiserEffect" id="{1e6f8930-8738-474e-a64a-c0c7b44201d3}" />
 	<object class="MixerBusFader" id="{7f8cc849-a3e8-48f3-89dd-33a63640d985}" />
 </objects>
